@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScaleLink | Distributed URL Shortener Engine</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Telemetry Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- QRCode.js for instant QR generation -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.05); }
+        }
+        .glow-bg {
+            animation: pulse-slow 8s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
+
+    <!-- Background Ambient Glow -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="glow-bg absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-indigo-600/20 blur-[130px] rounded-full"></div>
+        <div class="glow-bg absolute top-96 -left-20 w-[500px] h-[400px] bg-purple-600/15 blur-[120px] rounded-full"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="relative z-10 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-xl sticky top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">ScaleLink</span>
+                    <span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v1.0 Prod</span>
+                </div>
+            </div>
+
+            <!-- Architecture Tech Badges -->
+            <div class="hidden md:flex items-center space-x-2 text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-emerald-400 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    Java 21 Loom
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">L1/L2 Dual Cache</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-purple-300">Guava Bloom Barrier</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-amber-300">Async Telemetry</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="scrollToSection('architecture-section')" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition">
+                    ⚡ Telemetry
+                </button>
+                <button onclick="scrollToSection('analytics-section')" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition">
+                    📊 Analytics
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- Hero & URL Shortening Card -->
+        <section class="text-center max-w-3xl mx-auto space-y-8 pt-4">
+            <div class="space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Sub-millisecond High Throughput Architecture
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                    Shorten URLs at <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Scale</span>
+                </h1>
+                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
+                    Built with distributed <strong>Range ID Allocation (KGS)</strong>, <strong>Dual L1/L2 Caching</strong>, and probabilistic <strong>Guava Bloom Filters</strong> for zero-downtime redirects.
+                </p>
+            </div>
+
+            <!-- Shorten Input Box Card -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl backdrop-blur-md text-left transition hover:border-slate-700">
+                <form id="shortenForm" onsubmit="handleShorten(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Destination URL</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                            </div>
+                            <input type="url" id="originalUrl" required placeholder="https://your-long-domain.com/campaign/offer/xyz?ref=portfolio"
+                                   class="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm sm:text-base">
+                        </div>
+                    </div>
+
+                    <!-- Advanced Config (Custom Alias & TTL) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Custom Alias <span class="text-slate-500 font-normal lowercase">(optional)</span></label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs sm:text-sm">/</span>
+                                <input type="text" id="customAlias" placeholder="my-resume" pattern="^[a-zA-Z0-9_-]{3,32}$"
+                                       class="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Link Expiration <span class="text-slate-500 font-normal lowercase">(optional)</span></label>
+                            <select id="ttlDays" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="">Never Expires</option>
+                                <option value="1">1 Day</option>
+                                <option value="7">7 Days</option>
+                                <option value="30">30 Days</option>
+                                <option value="90">90 Days</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="shortenBtn"
+                            class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition duration-200 flex items-center justify-center gap-2">
+                        <span id="btnText">Shorten Link</span>
+                        <div id="btnSpinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </button>
+                </form>
+
+                <!-- Feedback / Error Banner -->
+                <div id="alertBox" class="hidden mt-4 p-3.5 rounded-xl text-sm"></div>
+
+                <!-- Result Card (Populated on success) -->
+                <div id="resultCard" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-950 rounded-xl border border-indigo-500/30">
+                        <div class="overflow-hidden">
+                            <span class="text-xs text-indigo-400 font-medium block">Shortened Link Ready</span>
+                            <a id="shortUrlLink" href="#" target="_blank" class="text-lg font-bold text-white hover:text-indigo-300 transition truncate block">
+                                https://scalelink.onrender.com/xyz123
+                            </a>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="copyToClipboard()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                                <span id="copyBtnText">Copy</span>
+                            </button>
+                            <button onclick="toggleQrModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition" title="Show QR Code">
+                                QR Code
+                            </button>
+                            <button onclick="loadAnalyticsFromCurrent()" class="px-3 py-2 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 rounded-lg text-xs font-semibold transition">
+                                Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QR Code Modal -->
+        <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xs w-full text-center space-y-4">
+                <h3 class="text-base font-bold text-white">QR Code</h3>
+                <div id="qrcode" class="p-3 bg-white rounded-xl inline-block"></div>
+                <p id="qrUrlText" class="text-xs text-slate-400 break-all"></p>
+                <button onclick="toggleQrModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-semibold text-white transition">Close</button>
+            </div>
+        </div>
+
+        <!-- Real-Time Analytics Dashboard Section -->
+        <section id="analytics-section" class="space-y-6 pt-6 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>📊 Real-Time Click Telemetry & Analytics</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm">Asynchronous batch telemetry ingested with zero redirect latency impact.</p>
+                </div>
+                <div class="flex items-center gap-2 max-w-xs w-full">
+                    <input type="text" id="analyticsCodeInput" placeholder="Enter short code (e.g. wU1)"
+                           class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="fetchAnalytics()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shrink-0 transition">
+                        Inspect
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analytics KPI Metrics Cards -->
+            <div id="analyticsKpiRow" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Total Clicks</span>
+                    <p id="kpiClicks" class="text-2xl font-extrabold text-white mt-1">-</p>
+                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Live Telemetry</span>
+                </div>
+                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Top Country</span>
+                    <p id="kpiCountry" class="text-2xl font-extrabold text-indigo-400 mt-1">-</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Geo Distribution</span>
+                </div>
+                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Top Device</span>
+                    <p id="kpiDevice" class="text-2xl font-extrabold text-purple-400 mt-1">-</p>
+                    <span class="text-[11px] text-slate-500 mt-1">User Agent Parsed</span>
+                </div>
+                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Link Status</span>
+                    <p id="kpiStatus" class="text-2xl font-extrabold text-white mt-1">-</p>
+                    <span id="kpiExpiry" class="text-[11px] text-slate-500 mt-1">TTL details</span>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Country Breakdown Chart -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
+                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Country Demographics</h3>
+                    <div class="h-56 relative flex items-center justify-center">
+                        <canvas id="countryChart"></canvas>
+                        <p id="countryEmptyText" class="text-xs text-slate-500">No click events recorded yet</p>
+                    </div>
+                </div>
+
+                <!-- Device Breakdown Chart -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
+                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Device & Browser Distribution</h3>
+                    <div class="h-56 relative flex items-center justify-center">
+                        <canvas id="deviceChart"></canvas>
+                        <p id="deviceEmptyText" class="text-xs text-slate-500">No click events recorded yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Telemetry Log Table -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 overflow-hidden">
+                <h3 class="text-sm font-semibold text-slate-300 mb-3">Live Click Stream (Recent 20 Audit Events)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="text-slate-500 border-b border-slate-800 uppercase font-medium">
+                            <tr>
+                                <th class="py-2.5 px-3">Timestamp</th>
+                                <th class="py-2.5 px-3">Country</th>
+                                <th class="py-2.5 px-3">Device</th>
+                                <th class="py-2.5 px-3">Browser</th>
+                                <th class="py-2.5 px-3">Referer</th>
+                                <th class="py-2.5 px-3">IP Hash (GDPR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="telemetryTableBody" class="divide-y divide-slate-800/60 font-mono">
+                            <tr>
+                                <td colspan="6" class="py-4 text-center text-slate-500 font-sans">
+                                    Click on a short link to trigger telemetry recording!
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Architecture & Engineering Telemetry Section -->
+        <section id="architecture-section" class="space-y-6 pt-6 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>⚡ Production Architecture & JVM Telemetry</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm">Live internal state of the distributed engine (Ideal for Technical Interviews).</p>
+                </div>
+                <button onclick="fetchSystemTelemetry()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition self-start sm:self-auto">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Refresh State
+                </button>
+            </div>
+
+            <!-- Live Engine Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Virtual Threads</span>
+                    <p class="text-xl font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Active
+                    </p>
+                    <span class="text-[11px] text-slate-500 mt-1">Java 21 Loom</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">L1 Caffeine Cache</span>
+                    <p id="telemetryL1Entries" class="text-xl font-bold text-indigo-400 mt-1">0 keys</p>
+                    <span class="text-[11px] text-slate-500 mt-1">&lt; 0.1ms read latency</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Guava Bloom Filter</span>
+                    <p id="telemetryBloomCount" class="text-xl font-bold text-purple-400 mt-1">0 items</p>
+                    <span class="text-[11px] text-slate-500 mt-1">1% FPP Barrier</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Async Ring Buffer</span>
+                    <p id="telemetryQueueDepth" class="text-xl font-bold text-amber-400 mt-1">0 queued</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Batch Flusher Active</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 col-span-2 md:col-span-1">
+                    <span class="text-xs text-slate-400 font-medium">JVM Heap Memory</span>
+                    <p id="telemetryMemory" class="text-xl font-bold text-white mt-1">- / - MB</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Container Optimized</span>
+                </div>
+            </div>
+
+            <!-- Architecture Workflow Cards -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
+                <h3 class="text-base font-bold text-white">How ScaleLink Handles High-Concurrency (System Design Walkthrough)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                        <span class="font-bold text-indigo-400">1. KGS Range Allocation</span>
+                        <p class="text-slate-400">
+                            Instead of doing slow DB row increments, pods atomically reserve blocks of 10,000 IDs with pessimistic row locks (<code class="text-slate-300">SELECT FOR UPDATE</code>). 9,999 out of 10,000 requests are served in-memory.
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                        <span class="font-bold text-purple-400">2. Bloom Filter Negative Barrier</span>
+                        <p class="text-slate-400">
+                            Malicious bot crawlers requesting random non-existent URLs are stopped cold at memory layer. If Guava Bloom Filter says NO, it's 100% not in DB—saving thousands of wasted Postgres connections.
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                        <span class="font-bold text-amber-400">3. Async Batch Telemetry</span>
+                        <p class="text-slate-400">
+                            HTTP 302 redirects are sent back to the browser immediately (&lt;5ms). Telemetry is dropped into a bounded ring buffer and flushed in batches of 200 via Java 21 Virtual Threads.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 space-y-2">
+        <p>ScaleLink Distributed URL Shortener Engine • Production Ready for Render & AWS</p>
+        <p>Built with Java 21, Spring Boot 3.5, Caffeine, Redis, Guava & PostgreSQL</p>
+    </footer>
+
+    <!-- Client-Side JavaScript -->
+    <script>
+        let latestShortCode = '';
+        let countryChartInstance = null;
+        let deviceChartInstance = null;
+
+        // Auto-initialize charts & telemetry on load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchSystemTelemetry();
+            // Refresh telemetry every 15 seconds
+            setInterval(fetchSystemTelemetry, 15000);
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function handleShorten(event) {
+            event.preventDefault();
+            const btn = document.getElementById('shortenBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const alertBox = document.getElementById('alertBox');
+            const resultCard = document.getElementById('resultCard');
+
+            const originalUrl = document.getElementById('originalUrl').value.trim();
+            const customAlias = document.getElementById('customAlias').value.trim();
+            const ttlDays = document.getElementById('ttlDays').value;
+
+            // Loading state
+            btn.disabled = true;
+            btnText.textContent = "Processing...";
+            btnSpinner.classList.remove('hidden');
+            alertBox.classList.add('hidden');
+
+            try {
+                const payload = {
+                    originalUrl: originalUrl,
+                    customAlias: customAlias || null,
+                    ttlDays: ttlDays ? parseInt(ttlDays) : null
+                };
+
+                const response = await fetch('/api/v1/shorten', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Link generation failed');
+                }
+
+                // Display success
+                latestShortCode = data.shortCode;
+                const linkElem = document.getElementById('shortUrlLink');
+                linkElem.href = data.shortUrl;
+                linkElem.textContent = data.shortUrl;
+
+                resultCard.classList.remove('hidden');
+
+                // Render QR Code
+                const qrContainer = document.getElementById('qrcode');
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: data.shortUrl,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff"
+                });
+                document.getElementById('qrUrlText').textContent = data.shortUrl;
+
+                // Pre-populate analytics input
+                document.getElementById('analyticsCodeInput').value = data.shortCode;
+
+                showAlert('Link successfully shortened & pre-warmed in L1 Cache!', 'success');
+                fetchSystemTelemetry();
+            } catch (err) {
+                showAlert(err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = "Shorten Link";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        function showAlert(msg, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.classList.remove('hidden', 'bg-red-500/10', 'border-red-500/20', 'text-red-400', 'bg-emerald-500/10', 'border-emerald-500/20', 'text-emerald-400');
+            if (type === 'error') {
+                alertBox.classList.add('bg-red-500/10', 'border', 'border-red-500/20', 'text-red-400');
+            } else {
+                alertBox.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500/20', 'text-emerald-400');
+            }
+            alertBox.textContent = msg;
+        }
+
+        function copyToClipboard() {
+            const linkElem = document.getElementById('shortUrlLink');
+            navigator.clipboard.writeText(linkElem.textContent.trim()).then(() => {
+                const btnText = document.getElementById('copyBtnText');
+                btnText.textContent = 'Copied!';
+                setTimeout(() => { btnText.textContent = 'Copy'; }, 2000);
+            });
+        }
+
+        function toggleQrModal() {
+            const modal = document.getElementById('qrModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function loadAnalyticsFromCurrent() {
+            if (latestShortCode) {
+                document.getElementById('analyticsCodeInput').value = latestShortCode;
+                fetchAnalytics();
+                scrollToSection('analytics-section');
+            }
+        }
+
+        async function fetchAnalytics() {
+            const code = document.getElementById('analyticsCodeInput').value.trim();
+            if (!code) {
+                alert('Please enter a short code');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/analytics/${code}`);
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.message || 'Analytics not found');
+                }
+
+                const data = await response.json();
+                renderAnalytics(data);
+            } catch (err) {
+                alert('Analytics Error: ' + err.message);
+            }
+        }
+
+        function renderAnalytics(data) {
+            // Update KPIs
+            document.getElementById('kpiClicks').textContent = Number(data.totalClicks || 0).toLocaleString();
+            
+            const countries = Object.keys(data.countryBreakdown || {});
+            document.getElementById('kpiCountry').textContent = countries.length > 0 ? countries[0] : 'None';
+
+            const devices = Object.keys(data.deviceBreakdown || {});
+            document.getElementById('kpiDevice').textContent = devices.length > 0 ? devices[0] : 'None';
+
+            document.getElementById('kpiStatus').textContent = data.expired ? 'Expired' : 'Active';
+            document.getElementById('kpiStatus').className = `text-2xl font-extrabold mt-1 ${data.expired ? 'text-red-400' : 'text-emerald-400'}`;
+            document.getElementById('kpiExpiry').textContent = data.expiresAt ? 'Expires: ' + new Date(data.expiresAt).toLocaleDateString() : 'Never expires';
+
+            // Render Charts
+            renderCountryChart(data.countryBreakdown || {});
+            renderDeviceChart(data.deviceBreakdown || {});
+
+            // Render Recent Events Table
+            const tbody = document.getElementById('telemetryTableBody');
+            tbody.innerHTML = '';
+
+            if (!data.recentEvents || data.recentEvents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500 font-sans">No clicks recorded yet for code '${data.shortCode}'</td></tr>`;
+            } else {
+                data.recentEvents.forEach(event => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-800/40 transition";
+                    const formattedTime = new Date(event.timestamp).toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 text-slate-400">${formattedTime}</td>
+                        <td class="py-2.5 px-3 font-semibold text-indigo-400">${event.country || 'Unknown'}</td>
+                        <td class="py-2.5 px-3 text-slate-300">${event.deviceType || 'Desktop'}</td>
+                        <td class="py-2.5 px-3 text-slate-300">${event.browser || 'Chrome'}</td>
+                        <td class="py-2.5 px-3 text-slate-400 truncate max-w-[120px]">${event.referer || 'Direct'}</td>
+                        <td class="py-2.5 px-3 text-slate-500">${event.ipHash || 'anon'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function renderCountryChart(countryMap) {
+            const labels = Object.keys(countryMap);
+            const values = Object.values(countryMap);
+            const emptyText = document.getElementById('countryEmptyText');
+
+            if (labels.length === 0) {
+                emptyText.classList.remove('hidden');
+                if (countryChartInstance) countryChartInstance.destroy();
+                return;
+            }
+            emptyText.classList.add('hidden');
+
+            const ctx = document.getElementById('countryChart').getContext('2d');
+            if (countryChartInstance) countryChartInstance.destroy();
+
+            countryChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Clicks',
+                        data: values,
+                        backgroundColor: '#6366f1',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', precision: 0 } }
+                    }
+                }
+            });
+        }
+
+        function renderDeviceChart(deviceMap) {
+            const labels = Object.keys(deviceMap);
+            const values = Object.values(deviceMap);
+            const emptyText = document.getElementById('deviceEmptyText');
+
+            if (labels.length === 0) {
+                emptyText.classList.remove('hidden');
+                if (deviceChartInstance) deviceChartInstance.destroy();
+                return;
+            }
+            emptyText.classList.add('hidden');
+
+            const ctx = document.getElementById('deviceChart').getContext('2d');
+            if (deviceChartInstance) deviceChartInstance.destroy();
+
+            deviceChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: ['#6366f1', '#a855f7', '#ec4899', '#38bdf8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        async function fetchSystemTelemetry() {
+            try {
+                const response = await fetch('/api/v1/system/status');
+                if (!response.ok) return;
+                const data = await response.json();
+
+                document.getElementById('telemetryL1Entries').textContent = (data.l1CacheEntries || 0) + ' keys';
+                document.getElementById('telemetryBloomCount').textContent = (data.bloomFilterEstimatedElements || 0) + ' items';
+                document.getElementById('telemetryQueueDepth').textContent = (data.analyticsQueueDepth || 0) + ' queued';
+                document.getElementById('telemetryMemory').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB`;
+            } catch (e) {
+                console.error("Telemetry fetch failed", e);
+            }
+        }
+    </script>
+</body>
+</html>

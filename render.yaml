@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: scalelink-url-shortener
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: BASE_URL
+        value: https://scalelink-url-shortener.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: scalelink-postgres
+          property: connectionString
+      - key: HIKARI_MAX_POOL_SIZE
+        value: 5
+
+databases:
+  - name: scalelink-postgres
+    plan: free
+    region: oregon
+    databaseName: shortenerdb
+    user: shortener_user
