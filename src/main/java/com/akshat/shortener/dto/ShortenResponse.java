@@ -1,5 +1,6 @@
 package com.akshat.shortener.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,5 +17,12 @@ public class ShortenResponse {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private String analyticsUrl;
+
+    @JsonProperty("isCustomAlias")
     private boolean isCustomAlias;
+
+    private boolean burnAfterReading;
+
+    @JsonProperty("isProtected")
+    private boolean isProtected;
 }

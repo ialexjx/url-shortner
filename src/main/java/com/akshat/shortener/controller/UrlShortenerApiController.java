@@ -91,4 +91,22 @@ public class UrlShortenerApiController {
                 "status", "DEACTIVATED"
         ));
     }
+
+    /**
+     * Unlocks a passcode-protected URL
+     */
+    @PostMapping("/api/v1/unlock/{shortCode}")
+    public ResponseEntity<Map<String, String>> unlockUrl(
+            @PathVariable String shortCode,
+            @RequestBody(required = false) Map<String, String> payload,
+            HttpServletRequest request
+    ) {
+        String passcode = (payload != null) ? payload.get("passcode") : null;
+        log.info("REST unlock request received for code: {}", shortCode);
+        String destinationUrl = urlShortenerService.unlockAndTrack(shortCode, passcode, request);
+        return ResponseEntity.ok(Map.of(
+                "destinationUrl", destinationUrl,
+                "status", "UNLOCKED"
+        ));
+    }
 }

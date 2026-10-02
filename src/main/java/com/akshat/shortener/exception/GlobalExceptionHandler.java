@@ -58,6 +58,18 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI(), null);
     }
 
+    @ExceptionHandler(InvalidPasscodeException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPasscode(InvalidPasscodeException ex, HttpServletRequest request) {
+        log.warn("Invalid passcode attempt: {} for path: {}", ex.getMessage(), request.getRequestURI());
+        return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI(), null);
+    }
+
+    @ExceptionHandler(ProtectedLinkException.class)
+    public ResponseEntity<ErrorResponse> handleProtectedLink(ProtectedLinkException ex, HttpServletRequest request) {
+        log.warn("Access attempt on protected link without auth: {} for path: {}", ex.getMessage(), request.getRequestURI());
+        return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI(), null);
+    }
+
     /**
      * Rate limit exceed hone par 429 Too Many Requests return karega
      */

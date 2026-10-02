@@ -5,7 +5,9 @@ import com.akshat.shortener.dto.ShortenRequest;
 import com.akshat.shortener.dto.ShortenResponse;
 import com.akshat.shortener.dto.SystemHealthResponse;
 import com.akshat.shortener.exception.AliasAlreadyExistsException;
+import com.akshat.shortener.exception.InvalidPasscodeException;
 import com.akshat.shortener.exception.InvalidUrlException;
+import com.akshat.shortener.exception.ProtectedLinkException;
 import com.akshat.shortener.exception.ResourceNotFoundException;
 import com.akshat.shortener.model.ClickEvent;
 import com.akshat.shortener.model.ShortUrl;
@@ -16,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +53,7 @@ public class UrlShortenerService {
     private final DualCacheService dualCacheService;
     private final AnalyticsBufferService analyticsBufferService;
     private final RateLimitingService rateLimitingService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${scalelink.base-url:http://localhost:8080}")
     private String baseUrl;
@@ -57,7 +61,8 @@ public class UrlShortenerService {
     // Reserved routes taaki custom alias API ya system endpoints ko overwrite na kare
     private static final Set<String> RESERVED_KEYWORDS = Set.of(
             "api", "admin", "analytics", "actuator", "health", "static", "css",
-            "js", "favicon.ico", "dashboard", "swagger", "v3", "index", "h2-console", "metrics"
+            "js", "favicon.ico", "dashboard", "swagger", "v3", "index", "h2-console", "metrics",
+            "vault", "unlock", "tombstone"
     );
 
     /**
@@ -99,6 +104,13 @@ public class UrlShortenerService {
             expiresAt = LocalDateTime.now().plusDays(request.getTtlDays());
         }
 
+        // Passcode hash & Burn after reading
+        String passcodeHash = null;
+        if (request.getPasscode() != null && !request.getPasscode().trim().isEmpty()) {
+            passcodeHash = passwordEncoder.encode(request.getPasscode().trim());
+        }
+        boolean burnAfterReading = Boolean.TRUE.equals(request.getBurnAfterReading());
+
         // 5. Database me persist karo
         ShortUrl shortUrl = ShortUrl.builder()
                 .shortCode(shortCode)
@@ -106,6 +118,8 @@ public class UrlShortenerService {
                 .expiresAt(expiresAt)
                 .isCustomAlias(isCustom)
                 .isActive(true)
+                .burnAfterReading(burnAfterReading)
+                .passcodeHash(passcodeHash)
                 .clickCount(0L)
                 .build();
 
@@ -114,15 +128,18 @@ public class UrlShortenerService {
         // 6. Guava Bloom Filter me register karo (taaki future lookups pass ho sakein)
         bloomFilterService.add(shortCode);
 
-        // 7. L1 & L2 Dual Cache ko pre-warm karo (Sub-millisecond first redirect!)
-        long ttlMinutes = 60 * 24; // Default 24 hours in cache
-        if (expiresAt != null) {
-            long remainingMinutes = Duration.between(LocalDateTime.now(), expiresAt).toMinutes();
-            ttlMinutes = Math.max(1, remainingMinutes);
+        // 7. L1 & L2 Dual Cache ko pre-warm karo (Only for public, non-burner URLs!)
+        if (!burnAfterReading && passcodeHash == null) {
+            long ttlMinutes = 60 * 24; // Default 24 hours in cache
+            if (expiresAt != null) {
+                long remainingMinutes = Duration.between(LocalDateTime.now(), expiresAt).toMinutes();
+                ttlMinutes = Math.max(1, remainingMinutes);
+            }
+            dualCacheService.put(shortCode, sanitizedUrl, ttlMinutes);
         }
-        dualCacheService.put(shortCode, sanitizedUrl, ttlMinutes);
 
-        log.info("URL successfully shortened: code={}, isCustom={}, expiresAt={}", shortCode, isCustom, expiresAt);
+        log.info("URL successfully shortened: code={}, isCustom={}, burn={}, protected={}, expiresAt={}",
+                shortCode, isCustom, burnAfterReading, passcodeHash != null, expiresAt);
 
         // 8. Build response
         String fullShortUrl = normalizeBaseUrl(baseUrl) + "/" + shortCode;
@@ -136,6 +153,8 @@ public class UrlShortenerService {
                 .expiresAt(expiresAt)
                 .analyticsUrl(analyticsUrl)
                 .isCustomAlias(isCustom)
+                .burnAfterReading(burnAfterReading)
+                .isProtected(shortUrl.isProtected())
                 .build();
     }
 
@@ -167,6 +186,9 @@ public class UrlShortenerService {
                     .orElseThrow(() -> new ResourceNotFoundException("Short URL '" + shortCode + "' nahi mila."));
 
             if (!Boolean.TRUE.equals(shortUrl.getIsActive())) {
+                if (Boolean.TRUE.equals(shortUrl.getBurnAfterReading())) {
+                    throw new ResourceNotFoundException("💥 Mission Impossible Mode: This link was set to Burn After Reading. The evidence has been permanently destroyed.");
+                }
                 throw new ResourceNotFoundException("Ye short URL deactivate ho chuka hai.");
             }
 
@@ -175,20 +197,90 @@ public class UrlShortenerService {
                 throw new ResourceNotFoundException("Ye short URL expire ho chuka hai.");
             }
 
+            if (shortUrl.isProtected()) {
+                throw new ProtectedLinkException("This link is protected behind a secret passcode vault.");
+            }
+
             destinationUrl = shortUrl.getOriginalUrl();
 
-            // Cache Warm-up for next reader
-            long ttlMinutes = 60 * 24;
-            if (shortUrl.getExpiresAt() != null) {
-                long remaining = Duration.between(LocalDateTime.now(), shortUrl.getExpiresAt()).toMinutes();
-                ttlMinutes = Math.max(1, remaining);
+            if (Boolean.TRUE.equals(shortUrl.getBurnAfterReading())) {
+                // Incinerate link immediately!
+                shortUrl.setIsActive(false);
+                shortUrlRepository.save(shortUrl);
+                dualCacheService.evict(shortCode);
+                log.info("Burn-after-reading link /{}: Incinerated and deactivated on first read.", shortCode);
+            } else {
+                // Cache Warm-up for next reader
+                long ttlMinutes = 60 * 24;
+                if (shortUrl.getExpiresAt() != null) {
+                    long remaining = Duration.between(LocalDateTime.now(), shortUrl.getExpiresAt()).toMinutes();
+                    ttlMinutes = Math.max(1, remaining);
+                }
+                dualCacheService.put(shortCode, destinationUrl, ttlMinutes);
             }
-            dualCacheService.put(shortCode, destinationUrl, ttlMinutes);
         }
 
-        // 5. Asynchronous Telemetry Ingestion (Non-blocking):
-        // HTTP Redirect thread ko DB me row update karne ki zaroorat nahi hai.
-        // Queue me push kiya aur turant return ho gaye!
+        // 5. Asynchronous Telemetry Ingestion (Non-blocking)
+        ClickEvent event = analyticsBufferService.buildEventFromRequest(shortCode, httpRequest);
+        analyticsBufferService.enqueue(event);
+
+        return destinationUrl;
+    }
+
+    /**
+     * Checks if a short code is protected with a secret vault passcode
+     */
+    public boolean isPasscodeProtected(String shortCode) {
+        if (!bloomFilterService.mightContain(shortCode)) {
+            return false;
+        }
+        return shortUrlRepository.findByShortCode(shortCode)
+                .map(ShortUrl::isProtected)
+                .orElse(false);
+    }
+
+    /**
+     * Unlocks a passcode-protected link and tracks click telemetry
+     */
+    @Transactional
+    public String unlockAndTrack(String shortCode, String passcode, HttpServletRequest httpRequest) {
+        String clientIp = extractClientIp(httpRequest);
+        rateLimitingService.checkRedirectLimit(clientIp);
+
+        if (!bloomFilterService.mightContain(shortCode)) {
+            throw new ResourceNotFoundException("Short URL '" + shortCode + "' exist nahi karta hai.");
+        }
+
+        ShortUrl shortUrl = shortUrlRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Short URL '" + shortCode + "' nahi mila."));
+
+        if (!Boolean.TRUE.equals(shortUrl.getIsActive())) {
+            if (Boolean.TRUE.equals(shortUrl.getBurnAfterReading())) {
+                throw new ResourceNotFoundException("💥 Mission Impossible Mode: This link was set to Burn After Reading. The evidence has been permanently destroyed.");
+            }
+            throw new ResourceNotFoundException("Ye short URL deactivate ho chuka hai.");
+        }
+
+        if (shortUrl.isExpired()) {
+            dualCacheService.evict(shortCode);
+            throw new ResourceNotFoundException("Ye short URL expire ho chuka hai.");
+        }
+
+        if (shortUrl.isProtected()) {
+            if (passcode == null || !passwordEncoder.matches(passcode.trim(), shortUrl.getPasscodeHash())) {
+                throw new InvalidPasscodeException("Wrong passcode clown. Try harder or go home.");
+            }
+        }
+
+        String destinationUrl = shortUrl.getOriginalUrl();
+
+        if (Boolean.TRUE.equals(shortUrl.getBurnAfterReading())) {
+            shortUrl.setIsActive(false);
+            shortUrlRepository.save(shortUrl);
+            dualCacheService.evict(shortCode);
+            log.info("Protected Burn-after-reading link /{}: Incinerated and deactivated after unlock.", shortCode);
+        }
+
         ClickEvent event = analyticsBufferService.buildEventFromRequest(shortCode, httpRequest);
         analyticsBufferService.enqueue(event);
 

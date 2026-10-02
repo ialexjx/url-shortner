@@ -61,6 +61,17 @@ public class ShortUrl {
     @Builder.Default
     private Boolean isActive = true;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean burnAfterReading = false;
+
+    @Column(length = 100)
+    private String passcodeHash;
+
+    public boolean isProtected() {
+        return passcodeHash != null && !passcodeHash.isBlank();
+    }
+
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {

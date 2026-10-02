@@ -35,4 +35,15 @@ public class ShortenRequest {
      * Optional TTL in days. Null = Never expires.
      */
     private Integer ttlDays;
+
+    /**
+     * Optional single-use mode: automatically deactivates after the very first click.
+     */
+    private Boolean burnAfterReading;
+
+    /**
+     * Optional secret passcode / PIN to protect the link behind a secure vault screen.
+     */
+    @Size(max = 64, message = "Passcode 64 characters se zyada lamba nahi ho sakta")
+    private String passcode;
 }

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortAF — Secret Vault</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#38bdf8',
+                            emerald: '#10b981',
+                            purple: '#a855f7',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    keyframes: {
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '20%, 60%': { transform: 'translateX(-8px)' },
+                            '40%, 80%': { transform: 'translateX(8px)' }
+                        }
+                    },
+                    animation: {
+                        shake: 'shake 0.4s ease-in-out'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Apple Glass Stylesheet -->
+    <link rel="stylesheet" href="/css/apple-glass.css">
+</head>
+<body class="bg-mesh-grid min-h-screen relative antialiased selection:bg-purple-500/20 selection:text-purple-300 flex flex-col justify-between">
+
+    <!-- Ambient Lighting Glows -->
+    <div class="glow-orb -top-40 left-1/2 -translate-x-1/2 bg-purple-500/15"></div>
+    <div class="glow-orb top-1/2 right-10 bg-sky-500/10"></div>
+
+    <!-- Minimal Header -->
+    <header class="relative z-10 w-full pt-8 px-6 flex justify-between items-center max-w-4xl mx-auto">
+        <a href="/" class="flex items-center gap-2 group">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-400 via-emerald-400 to-purple-400 p-[1px] shadow-sm">
+                <div class="w-full h-full bg-[#07090e] rounded-[11px] flex items-center justify-center">
+                    <i data-lucide="scissors" class="w-4 h-4 text-sky-400"></i>
+                </div>
+            </div>
+            <span class="font-bold tracking-tight text-white font-mono text-base">Short<span class="text-sky-400">AF</span></span>
+        </a>
+        <a href="/" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold text-slate-300 bg-white/5 border border-white/10 hover:text-white hover:border-white/20 transition">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-sky-400"></i>
+            <span>Home</span>
+        </a>
+    </header>
+
+    <!-- Main Content: Vault Card -->
+    <main class="relative z-10 max-w-md w-full mx-auto px-4 py-12">
+        <div id="vaultCard" class="apple-glass-card p-8 sm:p-10 text-center space-y-6 border border-purple-500/25 shadow-2xl relative">
+            <!-- Security Badge -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-purple-400"></i>
+                <span>ENCRYPTED PAYLOAD</span>
+            </div>
+
+            <!-- Vault Icon -->
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-purple-500/10 border border-purple-500/25 flex items-center justify-center shadow-inner">
+                <i data-lucide="key-round" class="w-10 h-10 text-purple-400"></i>
+            </div>
+
+            <!-- Title & Target -->
+            <div class="space-y-1.5">
+                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    Secret Passcode Required
+                </h1>
+                <p class="font-mono text-xs text-slate-400">
+                    Target: <code class="px-2 py-0.5 rounded bg-white/5 text-purple-300 border border-white/10" id="codeText" th:text="'/' + ${shortCode}">/code</code>
+                </p>
+                <p class="text-xs text-slate-400 leading-relaxed pt-1">
+                    This link is locked inside a secret vault. Enter the author's secret passcode to decrypt and proceed.
+                </p>
+            </div>
+
+            <!-- Error Banner -->
+            <div id="errorBanner" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 text-xs font-mono flex items-center gap-2 text-left">
+                <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
+                <span id="errorMessage">Wrong passcode clown. Try harder or go home.</span>
+            </div>
+
+            <!-- Unlock Form -->
+            <form id="vaultForm" onsubmit="handleUnlock(event)" class="space-y-4">
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        id="passcodeInput" 
+                        required 
+                        autocomplete="off"
+                        autofocus
+                        placeholder="Enter secret PIN / Passcode" 
+                        class="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 text-white placeholder-slate-500 font-mono text-center text-sm outline-none transition"
+                    />
+                    <button 
+                        type="button" 
+                        onclick="togglePasswordVisibility()" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition p-1"
+                    >
+                        <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="unlockBtn"
+                    class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 via-sky-500 to-emerald-500 hover:from-purple-500 hover:to-emerald-400 text-white shadow-lg transition transform active:scale-95 cursor-pointer"
+                >
+                    <i data-lucide="unlock" class="w-4 h-4"></i>
+                    <span id="btnText">Unlock & Proceed</span>
+                </button>
+            </form>
+
+            <p class="text-[11px] text-slate-500 font-mono italic">
+                Telemetry recorded upon successful unlock.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-white/10 py-6 text-center text-xs text-slate-500 space-y-1 font-mono">
+        <p class="text-slate-400">ShortAF • Zero-Downtime Infrastructure by <a href="https://github.com/ialexjx" target="_blank" class="text-white hover:text-sky-400 transition underline underline-offset-4">Akshat Jaiswal</a></p>
+    </footer>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const shortCode = /*[[${shortCode}]]*/ '';
+        /*]]>*/
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+        });
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('passcodeInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        async function handleUnlock(e) {
+            e.preventDefault();
+            const passcode = document.getElementById('passcodeInput').value.trim();
+            const btn = document.getElementById('unlockBtn');
+            const btnText = document.getElementById('btnText');
+            const card = document.getElementById('vaultCard');
+            const errorBanner = document.getElementById('errorBanner');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (!passcode) return;
+
+            btn.disabled = true;
+            btnText.textContent = 'Decrypting...';
+            errorBanner.classList.add('hidden');
+
+            try {
+                const response = await fetch(`/api/v1/unlock/${shortCode}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode: passcode })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    btnText.textContent = '✓ Unlocked! Redirecting...';
+                    btn.className = "w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-emerald-500 text-white shadow-lg transition";
+                    setTimeout(() => {
+                        window.location.href = data.destinationUrl;
+                    }, 500);
+                } else {
+                    const err = await response.json();
+                    throw new Error(err.message || 'Wrong passcode clown. Try harder or go home.');
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btnText.textContent = 'Unlock & Proceed';
+                errorMessage.textContent = err.message;
+                errorBanner.classList.remove('hidden');
+
+                // Trigger card shake animation
+                card.classList.remove('animate-shake');
+                void card.offsetWidth; // Trigger reflow
+                card.classList.add('animate-shake');
+                document.getElementById('passcodeInput').focus();
+                document.getElementById('passcodeInput').select();
+            } finally {
+                if (window.lucide) lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

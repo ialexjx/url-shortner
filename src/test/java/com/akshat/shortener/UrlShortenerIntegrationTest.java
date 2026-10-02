@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Map;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -144,5 +146,76 @@ class UrlShortenerIntegrationTest {
         // Requesting deactivated URL should return 404
         mockMvc.perform(get("/" + request.getCustomAlias()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Burn After Reading: First access redirects, second access is 404")
+    void testBurnAfterReadingFlow() throws Exception {
+        String code = "burn-" + System.currentTimeMillis();
+        ShortenRequest request = ShortenRequest.builder()
+                .originalUrl("https://github.com/ialexjx")
+                .customAlias(code)
+                .burnAfterReading(true)
+                .build();
+
+        mockMvc.perform(post("/api/v1/shorten")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.burnAfterReading", is(true)));
+
+        // 1st access: Returns 302 Redirect
+        mockMvc.perform(get("/" + code))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "https://github.com/ialexjx"));
+
+        // 2nd access: Incinerated! Returns 404
+        mockMvc.perform(get("/" + code))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Secret Vault: Protected link requires correct passcode")
+    void testPasscodeVaultFlow() throws Exception {
+        String code = "vault-" + System.currentTimeMillis();
+        ShortenRequest request = ShortenRequest.builder()
+                .originalUrl("https://github.com/ialexjx")
+                .customAlias(code)
+                .passcode("topSecret77")
+                .build();
+
+        mockMvc.perform(post("/api/v1/shorten")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.isProtected", is(true)));
+
+        // Browser GET returns Vault view
+        mockMvc.perform(get("/" + code).accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vault"));
+
+        // Unlock with wrong passcode -> 401 Unauthorized
+        mockMvc.perform(post("/api/v1/unlock/" + code)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("passcode", "wrongGuess"))))
+                .andExpect(status().isUnauthorized());
+
+        // Unlock with correct passcode -> 200 OK
+        mockMvc.perform(post("/api/v1/unlock/" + code)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("passcode", "topSecret77"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.destinationUrl", is("https://github.com/ialexjx")));
+    }
+
+    @Test
+    @DisplayName("Browser GET on dead link renders savage Tombstone view")
+    void testTombstoneBrowserView() throws Exception {
+        mockMvc.perform(get("/nonExistentKey999").accept(MediaType.TEXT_HTML))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("tombstone"))
+                .andExpect(model().attributeExists("shortCode"))
+                .andExpect(model().attributeExists("reason"));
     }
 }

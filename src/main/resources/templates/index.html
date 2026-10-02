@@ -158,6 +158,47 @@
                         </div>
                     </div>
 
+                    <!-- Stealth & Security Vault Controls (Optional) -->
+                    <div class="pt-1">
+                        <button type="button" onclick="toggleSecurityOptions()" class="flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-white transition cursor-pointer select-none">
+                            <i data-lucide="shield" class="w-3.5 h-3.5 text-purple-400"></i>
+                            <span class="font-semibold">Stealth & Security Controls (Optional)</span>
+                            <i id="securityChevron" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 transition-transform duration-200"></i>
+                        </button>
+
+                        <div id="securityOptionsPanel" class="hidden mt-3 p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-3.5">
+                            <!-- Burn After Reading Checkbox -->
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" id="burnAfterReading" class="mt-0.5 rounded bg-white/5 border-white/20 text-rose-500 focus:ring-rose-500/20 w-4 h-4 cursor-pointer">
+                                <div>
+                                    <div class="text-xs font-mono font-bold text-slate-200 group-hover:text-rose-400 transition flex items-center gap-1.5">
+                                        <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i>
+                                        <span>Burn After Reading (Single-Use Self-Destruct)</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 font-mono mt-0.5">
+                                        Link nukes itself immediately after the very first click. Subsequent visitors get hit with the dead tombstone.
+                                    </p>
+                                </div>
+                            </label>
+
+                            <!-- Secret Passcode Input -->
+                            <div class="space-y-1.5 pt-2 border-t border-white/5">
+                                <div class="flex items-center justify-between">
+                                    <label class="text-xs font-mono font-bold text-slate-300 flex items-center gap-1.5">
+                                        <i data-lucide="lock" class="w-3.5 h-3.5 text-purple-400"></i>
+                                        <span>Secret Vault Passcode (PIN Protect)</span>
+                                    </label>
+                                    <span class="text-[10px] text-purple-400 font-mono">BCrypt Protected</span>
+                                </div>
+                                <input type="password" id="secretPasscode" placeholder="Leave empty for public link, or enter PIN/key e.g. 7789"
+                                       class="apple-glass-input w-full px-3 py-2 rounded-lg text-xs font-mono text-white placeholder-slate-600">
+                                <p class="text-[11px] text-slate-500 font-mono">
+                                    Visitors must crack or enter this passcode on a slick glass vault screen before being redirected.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" id="shortenBtn"
                             class="shimmer-btn w-full py-4 px-6 rounded-xl text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 cursor-pointer mt-2 font-mono tracking-wider">
                         <i data-lucide="scissors" class="w-4 h-4 text-white"></i>
@@ -173,10 +214,14 @@
                 <div id="resultCard" class="hidden mt-6 pt-6 border-t border-white/10 space-y-4 relative z-10">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#07090e]/80 border border-sky-500/30">
                         <div class="overflow-hidden">
-                            <span class="text-[11px] text-sky-400 font-mono font-bold block flex items-center gap-1.5">
-                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
-                                ShortAF Link Ready:
-                            </span>
+                            <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                <span class="text-[11px] text-sky-400 font-mono font-bold flex items-center gap-1.5">
+                                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    ShortAF Link Ready:
+                                </span>
+                                <span id="badgeBurn" class="hidden px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">💥 BURN-ON-READ</span>
+                                <span id="badgeProtected" class="hidden px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">🔒 VAULT-LOCKED</span>
+                            </div>
                             <a id="shortUrlLink" href="#" target="_blank" class="text-base sm:text-lg font-black text-white hover:text-sky-300 transition truncate block font-mono mt-0.5 underline underline-offset-4">
                                 https://short.af/xyz123
                             </a>
@@ -624,6 +669,18 @@
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
+        function toggleSecurityOptions() {
+            const panel = document.getElementById('securityOptionsPanel');
+            const chevron = document.getElementById('securityChevron');
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                panel.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
         async function handleShorten(event) {
             event.preventDefault();
             const btn = document.getElementById('shortenBtn');
@@ -635,6 +692,8 @@
             const originalUrl = document.getElementById('originalUrl').value.trim();
             const customAlias = document.getElementById('customAlias').value.trim();
             const ttlDays = document.getElementById('ttlDays').value;
+            const burnAfterReading = document.getElementById('burnAfterReading') ? document.getElementById('burnAfterReading').checked : false;
+            const secretPasscode = document.getElementById('secretPasscode') ? document.getElementById('secretPasscode').value.trim() : '';
 
             btn.disabled = true;
             btnText.textContent = "CHOPPING OFF BLOAT...";
@@ -645,7 +704,9 @@
                 const payload = {
                     originalUrl: originalUrl,
                     customAlias: customAlias || null,
-                    ttlDays: ttlDays ? parseInt(ttlDays) : null
+                    ttlDays: ttlDays ? parseInt(ttlDays) : null,
+                    burnAfterReading: burnAfterReading || null,
+                    passcode: secretPasscode || null
                 };
 
                 const response = await fetch('/api/v1/shorten', {
@@ -667,6 +728,18 @@
                 linkElem.href = browserShortUrl;
                 linkElem.textContent = browserShortUrl;
 
+                // Badges
+                const badgeBurn = document.getElementById('badgeBurn');
+                const badgeProtected = document.getElementById('badgeProtected');
+                if (badgeBurn) {
+                    if (data.burnAfterReading) badgeBurn.classList.remove('hidden');
+                    else badgeBurn.classList.add('hidden');
+                }
+                if (badgeProtected) {
+                    if (data.isProtected || data.protected) badgeProtected.classList.remove('hidden');
+                    else badgeProtected.classList.add('hidden');
+                }
+
                 resultCard.classList.remove('hidden');
 
                 const qrContainer = document.getElementById('qrcode');
@@ -684,8 +757,12 @@
                 saveUserLink(data.shortCode, data.originalUrl);
                 selectTarget(data.shortCode);
 
-                showToast('✓ Link butchered & pre-warmed in L1 Cache!', 'success');
-                showAlert('✓ Link successfully de-bloated & pre-warmed in L1 Cache!', 'success');
+                const isSecured = data.isProtected || data.protected;
+                const toastMsg = data.burnAfterReading 
+                    ? '✓ Link butchered! Set to incinerate on 1st click.'
+                    : (isSecured ? '✓ Link butchered! Locked inside secret vault.' : '✓ Link butchered & pre-warmed in L1 Cache!');
+                showToast(toastMsg, 'success');
+                showAlert(toastMsg, 'success');
                 fetchSystemTelemetry();
             } catch (err) {
                 showAlert('✕ ' + err.message, 'error');
