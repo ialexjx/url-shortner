@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b101b"/>
+      <stop offset="100%" stop-color="#07090e"/>
+    </linearGradient>
+    <!-- Border Gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <!-- Cyan Glow -->
+    <linearGradient id="beamGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <!-- Scissor Gradient -->
+    <linearGradient id="scissorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with Border -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="2"/>
+
+  <!-- Glowing Cut Ribbon / Data Beam -->
+  <path d="M 12 52 L 52 12" stroke="url(#beamGrad)" stroke-width="4" stroke-linecap="round" filter="url(#glow)" opacity="0.85"/>
+  <path d="M 12 52 L 28 36" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 36 28 L 52 12" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Cyber Scissors -->
+  <g filter="url(#glow)">
+    <!-- Top-Right Blade -->
+    <path d="M 22 22 L 44 44" stroke="url(#scissorGrad)" stroke-width="4" stroke-linecap="round"/>
+    <!-- Bottom-Left Blade -->
+    <path d="M 44 22 L 22 44" stroke="url(#scissorGrad)" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Finger Rings -->
+    <circle cx="18" cy="18" r="6" fill="none" stroke="#38bdf8" stroke-width="3"/>
+    <circle cx="18" cy="46" r="6" fill="none" stroke="#a855f7" stroke-width="3"/>
+    
+    <!-- Pivot Pin -->
+    <circle cx="33" cy="33" r="2.5" fill="#ffffff"/>
+  </g>
+</svg>
