@@ -1,0 +1,308 @@
+/* ==========================================================================
+   ShortAF Apple-Grade Glassmorphic Engine & Savage Dark Theme System
+   Designed to match Akshat Jaiswal's High-Scale Portfolio Architecture
+   ========================================================================== */
+
+:root {
+    /* DARK THEME (PORTFOLIO DEFAULT) */
+    --bg-primary: #07090e;
+    --bg-secondary: #0d121c;
+    --glass-surface: rgba(18, 24, 38, 0.70);
+    --glass-surface-hover: rgba(26, 35, 54, 0.88);
+    --glass-card: rgba(15, 21, 34, 0.60);
+    --glass-border: rgba(255, 255, 255, 0.10);
+    --glass-border-hover: rgba(56, 189, 248, 0.40);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent-cyan: #38bdf8;    /* Electric Cyan */
+    --accent-emerald: #10b981; /* High-TPS Emerald */
+    --accent-purple: #a855f7;  /* Enterprise Loom Purple */
+    --accent-rose: #f43f5e;    /* Savage Nuke Rose */
+    --accent-amber: #f59e0b;   /* Dictator Gold */
+    --nav-bg: rgba(7, 9, 14, 0.80);
+    --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(56, 189, 248, 0.08);
+    --code-bg: rgba(2, 6, 23, 0.85);
+    --grid-color: rgba(255, 255, 255, 0.035);
+    --pill-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* Base Body Styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle Animated Grid Background with Electric Mesh Glow */
+.bg-mesh-grid {
+    background-color: var(--bg-primary);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, transparent 55%),
+        radial-gradient(circle at 100% 35%, rgba(16, 185, 129, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 0% 75%, rgba(168, 85, 247, 0.09) 0%, transparent 45%),
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    background-attachment: fixed;
+}
+
+/* Apple Frosted Glass Navbar */
+.apple-glass-nav {
+    background: var(--nav-bg);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.7);
+}
+
+/* Apple Frosted Glass Panels */
+.apple-glass {
+    background: var(--glass-surface);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Frosted Glass Cards */
+.apple-glass-card {
+    background: var(--glass-card);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    border-radius: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.apple-glass-card:hover {
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 35px -5px rgba(56, 189, 248, 0.20);
+}
+
+/* Dynamic Cursor Specular Glow inside Cards */
+.specular-glow {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    mix-blend-mode: screen;
+}
+
+.apple-glass-card:hover .specular-glow {
+    opacity: 1;
+}
+
+/* Savage Badge Pills */
+.savage-pill {
+    background: var(--pill-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+}
+
+.savage-pill:hover {
+    border-color: var(--accent-cyan);
+    background: rgba(56, 189, 248, 0.12);
+    transform: translateY(-1px);
+}
+
+/* macOS Dock Physics & Magnification System */
+.mac-dock-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.65rem;
+    border-radius: 9999px;
+    white-space: nowrap !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                color 0.2s ease, 
+                background-color 0.2s ease;
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.mac-dock-item:hover {
+    transform: scale(1.08) translateY(-1px);
+    color: var(--accent-cyan) !important;
+    background-color: rgba(56, 189, 248, 0.10);
+}
+
+.mac-dock-card {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.3s ease;
+    will-change: transform, box-shadow;
+}
+
+.mac-dock-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 25px 45px -12px rgba(56, 189, 248, 0.25), 0 0 25px -5px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* Glass Inputs */
+.apple-glass-input {
+    background: rgba(7, 9, 14, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-glass-input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    outline: none;
+}
+
+/* Shimmer Button (Electric Cyan to High-TPS Emerald) */
+.shimmer-btn {
+    background: linear-gradient(135deg, #0284c7 0%, #06b6d4 50%, #10b981 100%);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shimmer-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent,
+        rgba(255, 255, 255, 0.30),
+        transparent
+    );
+    transform: rotate(30deg);
+    animation: button-shimmer 4s infinite linear;
+}
+
+@keyframes button-shimmer {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    20%, 100% { transform: translateX(100%) rotate(30deg); }
+}
+
+.shimmer-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 30px -8px rgba(56, 189, 248, 0.45);
+}
+
+/* Pulsing Status Dot */
+.pulsing-dot {
+    position: relative;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+}
+
+.pulsing-dot::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    background-color: var(--accent-emerald);
+    opacity: 0.75;
+    animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.pulsing-dot::after {
+    content: '';
+    position: relative;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: var(--accent-emerald);
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+/* Terminal Window Box */
+.terminal-window {
+    background: var(--code-bg);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.25rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px -8px rgba(56, 189, 248, 0.15);
+    font-family: 'JetBrains Mono', Menlo, Monaco, monospace;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.22);
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.45);
+}
+
+/* Glass Toast Container */
+#toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+.apple-glass-toast {
+    background: rgba(13, 18, 28, 0.90);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+    border-radius: 1rem;
+    padding: 0.875rem 1.25rem;
+    color: #f8fafc;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: auto;
+    animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

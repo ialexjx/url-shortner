@@ -1,145 +1,226 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShortAF 👑 | The Dictator Console</title>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: ['class', '[data-theme="dark"]'],
             theme: {
                 extend: {
                     colors: {
-                        fire: {
-                            500: '#f43f5e',
-                            600: '#e11d48',
+                        brand: {
+                            cyan: '#38bdf8',
+                            emerald: '#10b981',
+                            purple: '#a855f7',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b'
                         }
                     }
                 }
             }
         }
     </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Portfolio Apple Glass Stylesheet -->
+    <link rel="stylesheet" href="/css/apple-glass.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white antialiased">
+<body class="bg-mesh-grid min-h-screen relative antialiased selection:bg-sky-500/20 selection:text-sky-300">
 
-    <!-- Top Navigation Header -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <a href="/" class="flex items-center space-x-2.5">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                        <span class="text-xl">👑</span>
-                    </div>
-                    <div>
-                        <span class="text-xl font-black tracking-tight text-white font-mono">Short<span class="text-rose-500">AF</span></span>
-                        <span class="ml-1.5 text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider">Dictator Console</span>
-                    </div>
-                </a>
-            </div>
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
 
-            <!-- Admin Key & Navigation Links -->
-            <div class="flex items-center space-x-3">
-                <div class="hidden sm:flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs">
-                    <span class="text-slate-400">Master Key:</span>
-                    <input type="password" id="adminKeyInput" value="admin123" placeholder="admin123"
-                           class="bg-transparent border-0 text-amber-400 font-mono focus:outline-none w-24 text-xs font-bold">
-                    <button onclick="saveAdminKey()" class="text-slate-400 hover:text-white transition font-bold" title="Apply Key">✓</button>
+    <!-- ====================================================================
+         FLOATING APPLE GLASS PILL NAVBAR
+         ==================================================================== -->
+    <header class="fixed top-4 left-0 right-0 z-40 px-3 sm:px-6 max-w-7xl mx-auto">
+        <nav class="apple-glass-nav rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-all duration-300">
+            <!-- Brand / Logo -->
+            <a href="/" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5 shadow-lg shadow-amber-500/25 shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full rounded-full bg-[#07090e] flex items-center justify-center text-xs font-black tracking-tighter text-amber-400 font-mono">
+                        👑
+                    </div>
                 </div>
-                <a href="/" class="text-xs sm:text-sm font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Public Shortener
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors leading-tight font-mono">Short<span class="text-amber-400">AF</span></span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 uppercase tracking-wider font-mono">DICTATOR</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono leading-none pt-0.5">
+                        <span class="pulsing-dot"></span>
+                        <span>Supreme Authority Active</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Master Key Pill Input -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-1.5 bg-[#07090e]/80 border border-white/10 rounded-full px-3 py-1.5 text-xs shadow-inner">
+                    <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                    <span class="hidden md:inline text-slate-400 font-mono text-[11px]">Key:</span>
+                    <input type="password" id="adminKeyInput" value="admin123" placeholder="admin123"
+                           class="bg-transparent border-0 text-amber-300 font-mono focus:outline-none w-20 sm:w-24 text-xs font-bold"
+                           title="Enter Master Key (Default: admin123)">
+                    <button onclick="saveAdminKey()" class="text-slate-400 hover:text-white p-0.5 transition" title="Save Key">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    </button>
+                </div>
+
+                <a href="/" class="mac-dock-item px-3.5 py-1.5 rounded-full text-xs font-mono font-bold text-slate-300 hover:text-sky-300 bg-white/5 border border-white/10 flex items-center gap-1.5 transition">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-sky-400"></i>
+                    <span class="hidden sm:inline">Public Shortener</span>
+                    <span class="sm:hidden">App</span>
                 </a>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Main Content Area -->
+    <main class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 space-y-8">
 
-        <!-- Savage Banner with Demo Notice -->
-        <div class="bg-gradient-to-r from-amber-500/10 via-slate-900 to-rose-500/10 border border-amber-500/20 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-                <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
-                    <span>👑 Absolute Link Authority & Governance</span>
-                </h2>
-                <p class="text-xs sm:text-sm text-slate-400">
-                    Where links go to die when someone abuses the free tier or sends shady phishing garbage.
-                </p>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-                <span class="text-xs px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-bold">
-                    Portfolio Demo Key: <strong>admin123</strong>
-                </span>
-                <button onclick="loadAdminData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1 transition">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    Refresh
-                </button>
-            </div>
-        </div>
-
-        <!-- Metrics Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Bloated Links Butchered</span>
-                <p id="statTotalUrls" class="text-3xl font-black text-white mt-1 font-mono">-</p>
-                <span class="text-[11px] text-slate-500 mt-1">Postgres Records</span>
-            </div>
-            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Global Clicks Ingested</span>
-                <p id="statTotalClicks" class="text-3xl font-black text-rose-400 mt-1 font-mono">-</p>
-                <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● In-Memory Batch Aggregated</span>
-            </div>
-            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Active vs Banished</span>
-                <p id="statActiveUrls" class="text-3xl font-black text-emerald-400 mt-1 font-mono">-</p>
-                <span id="statInactiveSub" class="text-[11px] text-slate-500 mt-1">- banished</span>
-            </div>
-            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">L1 Cache / JVM Memory</span>
-                <p id="statL1Memory" class="text-3xl font-black text-purple-400 mt-1 font-mono">-</p>
-                <span id="statBloomSub" class="text-[11px] text-slate-500 mt-1">Bloom barrier active</span>
-            </div>
-        </div>
-
-        <!-- Table Container -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="relative flex-1 max-w-md">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <!-- Authority Governance Banner -->
+        <div class="apple-glass-card p-6 relative">
+            <div class="specular-glow"></div>
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/25">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>Supreme Authority & Governance</span>
                     </div>
-                    <input type="text" id="searchInput" placeholder="Search shortCode or target URL..."
+                    <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        The Dictator Console
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+                        Where bloated URLs, phishing scams, and dead links meet digital oblivion. Banish, revive, or nuke shortcodes directly from PostgreSQL & L1 Caffeine Cache.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 self-start md:self-center">
+                    <span class="text-xs px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-bold flex items-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
+                        Demo Key: <strong class="text-white">admin123</strong>
+                    </span>
+                    <button onclick="loadAdminData()" class="px-3.5 py-2 bg-white/10 hover:bg-white/15 text-slate-200 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 border border-white/10 transition cursor-pointer">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-sky-400" id="refreshIcon"></i>
+                        <span>Sync</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics KPI Cards Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Bloated Links Butchered -->
+            <div class="apple-glass-card p-5">
+                <div class="specular-glow"></div>
+                <div class="relative z-10 space-y-1">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-mono">
+                        <span>Links Butchered</span>
+                        <i data-lucide="link" class="w-4 h-4 text-sky-400"></i>
+                    </div>
+                    <p id="statTotalUrls" class="text-3xl sm:text-4xl font-black text-white font-mono">-</p>
+                    <div class="text-[11px] text-sky-400/90 font-mono flex items-center gap-1 pt-1">
+                        <span>Postgres Entities</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Clicks Ingested -->
+            <div class="apple-glass-card p-5">
+                <div class="specular-glow"></div>
+                <div class="relative z-10 space-y-1">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-mono">
+                        <span>Clicks Ingested</span>
+                        <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <p id="statTotalClicks" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono">-</p>
+                    <div class="text-[11px] text-emerald-400 flex items-center gap-1 font-mono pt-1">
+                        <span class="pulsing-dot"></span>
+                        <span>Async Batch Aggregated</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active vs Banished -->
+            <div class="apple-glass-card p-5">
+                <div class="specular-glow"></div>
+                <div class="relative z-10 space-y-1">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-mono">
+                        <span>Active Links</span>
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    </div>
+                    <p id="statActiveUrls" class="text-3xl sm:text-4xl font-black text-white font-mono">-</p>
+                    <div id="statInactiveSub" class="text-[11px] text-slate-400 font-mono pt-1">
+                        - banished
+                    </div>
+                </div>
+            </div>
+
+            <!-- L1 Cache & JVM Memory -->
+            <div class="apple-glass-card p-5">
+                <div class="specular-glow"></div>
+                <div class="relative z-10 space-y-1">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-mono">
+                        <span>L1 Caffeine Cache</span>
+                        <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i>
+                    </div>
+                    <p id="statL1Memory" class="text-3xl sm:text-4xl font-black text-purple-400 font-mono">-</p>
+                    <div id="statBloomSub" class="text-[11px] text-slate-400 font-mono pt-1 truncate">
+                        Bloom barrier active
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links Directory Table Section -->
+        <div class="apple-glass-card p-5 sm:p-6 space-y-5">
+            <div class="specular-glow"></div>
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="relative flex-1 max-w-lg">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    <input type="text" id="searchInput" placeholder="Search shortCode or target destination URL..."
                            onkeyup="handleSearchKeyup(event)"
-                           class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 text-xs sm:text-sm font-mono">
+                           class="apple-glass-input w-full pl-10 pr-4 py-2.5 rounded-xl text-white placeholder-slate-500 text-xs sm:text-sm font-mono">
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="triggerSearch()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition">
-                        Search
+                    <button onclick="triggerSearch()" class="px-4 py-2.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-xl text-xs font-mono transition cursor-pointer flex items-center gap-1.5">
+                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                        <span>Search</span>
                     </button>
-                    <button onclick="clearSearch()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition">
+                    <button onclick="clearSearch()" class="px-3 py-2.5 bg-white/10 hover:bg-white/15 text-slate-300 rounded-xl text-xs font-mono font-semibold transition cursor-pointer border border-white/10">
                         Clear
                     </button>
                 </div>
             </div>
 
             <!-- Table -->
-            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+            <div class="relative z-10 overflow-x-auto rounded-xl border border-white/10 bg-[#07090e]/60">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                    <thead class="bg-white/[0.03] text-slate-400 uppercase font-mono text-[11px] border-b border-white/10">
                         <tr>
-                            <th class="py-3 px-3">Short Code</th>
-                            <th class="py-3 px-3">Destination URL</th>
-                            <th class="py-3 px-3">Clicks</th>
-                            <th class="py-3 px-3">Created</th>
-                            <th class="py-3 px-3">Status</th>
-                            <th class="py-3 px-3 text-right">Dictator Actions</th>
+                            <th class="py-3.5 px-4">Short Code</th>
+                            <th class="py-3.5 px-4">Destination URL</th>
+                            <th class="py-3.5 px-4">Clicks</th>
+                            <th class="py-3.5 px-4">Created</th>
+                            <th class="py-3.5 px-4">Status</th>
+                            <th class="py-3.5 px-4 text-right">Dictator Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="urlTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40 font-mono">
+                    <tbody id="urlTableBody" class="divide-y divide-white/5 font-mono">
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-slate-500 font-sans">
+                            <td colspan="6" class="py-10 text-center text-slate-500 font-sans">
                                 Loading directory of links...
                             </td>
                         </tr>
@@ -148,15 +229,15 @@
             </div>
 
             <!-- Pagination Bar -->
-            <div class="flex items-center justify-between pt-2 text-xs text-slate-400 font-mono">
+            <div class="relative z-10 flex items-center justify-between pt-1 text-xs text-slate-400 font-mono">
                 <span id="pageInfo">Showing page 1</span>
                 <div class="flex items-center space-x-2">
                     <button id="prevBtn" onclick="changePage(-1)" disabled
-                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition font-bold">
+                            class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-300 disabled:opacity-30 disabled:hover:bg-white/10 border border-white/10 transition font-bold cursor-pointer">
                         Previous
                     </button>
                     <button id="nextBtn" onclick="changePage(1)" disabled
-                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition font-bold">
+                            class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-300 disabled:opacity-30 disabled:hover:bg-white/10 border border-white/10 transition font-bold cursor-pointer">
                         Next
                     </button>
                 </div>
@@ -166,38 +247,71 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 font-mono">
-        ShortAF Dictator Console • Supreme Authority & Lifecycle Control
+    <footer class="relative z-10 border-t border-white/10 py-8 text-center text-xs text-slate-500 font-mono space-y-1">
+        <p class="text-slate-400">ShortAF Dictator Console • Supreme Authority & Lifecycle Control</p>
+        <p class="text-slate-600">Built for Akshat Jaiswal's High-Scale Portfolio Architecture</p>
     </footer>
 
-    <!-- Script -->
+    <!-- Client-Side JavaScript -->
     <script>
         let currentPage = 0;
         let totalPages = 1;
         let currentSearch = '';
 
         function getAdminKey() {
-            return localStorage.getItem('scalelink_admin_key') || document.getElementById('adminKeyInput').value.trim() || 'admin123';
+            return localStorage.getItem('shortaf_admin_key') || document.getElementById('adminKeyInput').value.trim() || 'admin123';
         }
 
         function saveAdminKey() {
             const key = document.getElementById('adminKeyInput').value.trim();
-            localStorage.setItem('scalelink_admin_key', key);
-            alert('Master Key updated! Reloading console data...');
+            localStorage.setItem('shortaf_admin_key', key);
+            showToast('Master Key updated! Reloading data...', 'success');
             loadAdminData();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('scalelink_admin_key');
+            const saved = localStorage.getItem('shortaf_admin_key');
             if (saved) {
                 document.getElementById('adminKeyInput').value = saved;
             }
+            if (window.lucide) lucide.createIcons();
+            initSpecularGlow();
             loadAdminData();
         });
 
+        function initSpecularGlow() {
+            const cards = document.querySelectorAll('.apple-glass-card');
+            cards.forEach(card => {
+                let glow = card.querySelector('.specular-glow');
+                if (!glow) {
+                    glow = document.createElement('div');
+                    glow.className = 'specular-glow';
+                    card.appendChild(glow);
+                }
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    glow.style.left = `${x}px`;
+                    glow.style.top = `${y}px`;
+                });
+            });
+        }
+
         async function loadAdminData() {
-            await fetchOverview();
-            await fetchUrls(currentPage, currentSearch);
+            const refreshIcon = document.getElementById('refreshIcon');
+            if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+            try {
+                await Promise.all([
+                    fetchOverview(),
+                    fetchUrls(currentPage, currentSearch)
+                ]);
+            } finally {
+                if (refreshIcon) refreshIcon.classList.remove('animate-spin');
+                if (window.lucide) lucide.createIcons();
+            }
         }
 
         async function fetchOverview() {
@@ -210,9 +324,9 @@
                 document.getElementById('statTotalUrls').textContent = Number(data.totalUrls || 0).toLocaleString();
                 document.getElementById('statTotalClicks').textContent = Number(data.totalClicks || 0).toLocaleString();
                 document.getElementById('statActiveUrls').textContent = Number(data.activeUrls || 0).toLocaleString();
-                document.getElementById('statInactiveSub').textContent = `${data.inactiveUrls || 0} banished`;
+                document.getElementById('statInactiveSub').textContent = `${data.inactiveUrls || 0} banished / inactive`;
                 document.getElementById('statL1Memory').textContent = `${data.l1CacheEntries || 0} keys`;
-                document.getElementById('statBloomSub').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB JVM`;
+                document.getElementById('statBloomSub').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB JVM Heap`;
             } catch (err) {
                 console.error("Overview error", err);
             }
@@ -230,7 +344,11 @@
 
                 const res = await fetch(url);
                 if (res.status === 401) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-rose-400 font-sans">Invalid Master Key! Enter valid key in the top bar (Demo: admin123).</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-rose-400 font-sans">
+                        <i data-lucide="shield-alert" class="w-6 h-6 mx-auto mb-2 text-rose-400"></i>
+                        Invalid Master Key! Enter a valid key in the top bar (Demo: <strong>admin123</strong>).
+                    </td></tr>`;
+                    if (window.lucide) lucide.createIcons();
                     return;
                 }
                 if (!res.ok) throw new Error('Failed to fetch URLs');
@@ -242,7 +360,9 @@
                 renderTable(data.content);
                 updatePagination(data);
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-rose-400 font-sans">${err.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-rose-400 font-sans">${err.message}</td></tr>`;
+            } finally {
+                if (window.lucide) lucide.createIcons();
             }
         }
 
@@ -251,51 +371,54 @@
             tbody.innerHTML = '';
 
             if (!urls || urls.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500 font-sans">No URLs found matching your criteria.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500 font-sans">No URLs found matching your criteria.</td></tr>`;
                 return;
             }
 
             urls.forEach(u => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/40 transition border-b border-slate-800/40";
+                tr.className = "hover:bg-white/[0.04] transition border-b border-white/5";
 
                 let statusBadge = '';
                 if (!u.active) {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px]">Banished</span>';
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px] font-bold">Banished</span>';
                 } else if (u.expired) {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px]">Dead</span>';
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold">Dead</span>';
                 } else {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Alive</span>';
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">Alive</span>';
                 }
 
                 const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
 
                 tr.innerHTML = `
-                    <td class="py-3 px-3 font-mono font-bold text-white">
-                        <a href="/${u.shortCode}" target="_blank" class="hover:text-rose-400 transition underline underline-offset-2">
-                            ${u.shortCode}
-                        </a>
-                        ${u.customAlias ? '<span class="ml-1 text-[9px] text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">flex</span>' : ''}
+                    <td class="py-3.5 px-4 font-mono font-bold text-white">
+                        <div class="flex items-center gap-1.5">
+                            <a href="/${u.shortCode}" target="_blank" class="hover:text-sky-400 transition underline underline-offset-4 flex items-center gap-1">
+                                <span>${u.shortCode}</span>
+                                <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+                            </a>
+                            ${u.customAlias ? '<span class="text-[9px] text-sky-400 bg-sky-500/10 border border-sky-500/25 px-1.5 py-0.5 rounded font-mono font-bold">vanity</span>' : ''}
+                        </div>
                     </td>
-                    <td class="py-3 px-3 max-w-xs truncate text-slate-300" title="${u.originalUrl}">
+                    <td class="py-3.5 px-4 max-w-xs truncate text-slate-300 font-mono text-xs" title="${u.originalUrl}">
                         <a href="${u.originalUrl}" target="_blank" class="hover:text-white transition">
                             ${u.originalUrl}
                         </a>
                     </td>
-                    <td class="py-3 px-3 font-bold text-slate-200">
+                    <td class="py-3.5 px-4 font-bold text-emerald-400 font-mono">
                         ${Number(u.clickCount || 0).toLocaleString()}
                     </td>
-                    <td class="py-3 px-3 text-slate-400 text-[11px]">
+                    <td class="py-3.5 px-4 text-slate-400 text-[11px] font-mono">
                         ${dateStr}
                     </td>
-                    <td class="py-3 px-3">
+                    <td class="py-3.5 px-4">
                         ${statusBadge}
                     </td>
-                    <td class="py-3 px-3 text-right space-x-1 shrink-0">
-                        <button onclick="toggleStatus('${u.shortCode}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-bold transition">
+                    <td class="py-3.5 px-4 text-right space-x-1.5 shrink-0 font-mono">
+                        <button onclick="toggleStatus('${u.shortCode}')" class="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg text-[11px] font-bold border border-white/10 transition cursor-pointer">
                             ${u.active ? 'Banish' : 'Revive'}
                         </button>
-                        <button onclick="deleteLink('${u.shortCode}')" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded text-[11px] font-bold transition">
+                        <button onclick="deleteLink('${u.shortCode}')" class="px-2.5 py-1 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 rounded-lg text-[11px] font-bold border border-rose-500/30 transition cursor-pointer">
                             Nuke
                         </button>
                     </td>
@@ -342,10 +465,12 @@
                 const res = await fetch(`/api/v1/admin/urls/${shortCode}/toggle?key=${encodeURIComponent(key)}`, {
                     method: 'POST'
                 });
-                if (!res.ok) throw new Error('Action failed');
+                if (!res.ok) throw new Error('Status toggle failed');
+                const data = await res.json();
+                showToast(data.message || 'Status updated', 'success');
                 loadAdminData();
             } catch (err) {
-                alert('Action failed: ' + err.message);
+                showToast(err.message, 'error');
             }
         }
 
@@ -359,10 +484,41 @@
                     method: 'DELETE'
                 });
                 if (!res.ok) throw new Error('Nuke failed');
+                showToast(`Link '${shortCode}' nuked from database & cache`, 'success');
                 loadAdminData();
             } catch (err) {
-                alert('Nuke failed: ' + err.message);
+                showToast(err.message, 'error');
             }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'apple-glass-toast';
+
+            let iconName = 'info';
+            let iconColor = 'text-sky-400';
+            if (type === 'success') {
+                iconName = 'check-circle-2';
+                iconColor = 'text-emerald-400';
+            } else if (type === 'error') {
+                iconName = 'alert-triangle';
+                iconColor = 'text-rose-400';
+            }
+
+            toast.innerHTML = `
+                <i data-lucide="${iconName}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            if (window.lucide) lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px) scale(0.95)';
+                setTimeout(() => toast.remove(), 350);
+            }, 3200);
         }
     </script>
 </body>

@@ -1,162 +1,155 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShortAF 🔥 | Links So Short They Actually Get Clicked</title>
+    <title>ShortAF | Distributed High-Throughput URL Engine</title>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for Telemetry Charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- QRCode.js for instant QR generation -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: ['class', '[data-theme="dark"]'],
             theme: {
                 extend: {
                     colors: {
-                        fire: {
-                            400: '#fb7185',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        },
-                        cyber: {
-                            purple: '#a855f7',
-                            cyan: '#06b6d4',
+                        brand: {
+                            cyan: '#38bdf8',
                             emerald: '#10b981',
+                            purple: '#a855f7',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b'
                         }
                     }
                 }
             }
         }
     </script>
-    <style>
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.25; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.08); }
-        }
-        .glow-effect {
-            animation: pulse-glow 7s infinite ease-in-out;
-        }
-        .text-gradient {
-            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .border-gradient {
-            border-image: linear-gradient(to right, #f43f5e, #a855f7) 1;
-        }
-    </style>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js & QRCode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <!-- Portfolio Apple Glass Stylesheet -->
+    <link rel="stylesheet" href="/css/apple-glass.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white antialiased">
+<body class="bg-mesh-grid min-h-screen relative antialiased selection:bg-sky-500/20 selection:text-sky-300">
 
-    <!-- Ambient Neon Cyber Glow -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="glow-effect absolute -top-40 left-1/2 -translate-x-1/2 w-[750px] h-[550px] bg-rose-600/20 blur-[140px] rounded-full"></div>
-        <div class="glow-effect absolute top-96 -left-32 w-[550px] h-[450px] bg-purple-600/15 blur-[130px] rounded-full"></div>
-        <div class="glow-effect absolute bottom-20 -right-20 w-[500px] h-[400px] bg-cyan-600/10 blur-[130px] rounded-full"></div>
-    </div>
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
 
-    <!-- Top Navigation Header -->
-    <header class="relative z-20 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <a href="/" class="flex items-center space-x-2.5">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-pink-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-500/30">
-                        <span class="text-xl">🔥</span>
+    <!-- ====================================================================
+         FLOATING APPLE GLASS PILL NAVBAR
+         ==================================================================== -->
+    <header class="fixed top-4 left-0 right-0 z-40 px-3 sm:px-6 max-w-7xl mx-auto">
+        <nav class="apple-glass-nav rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-all duration-300">
+            <!-- Brand / Logo -->
+            <a href="/" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 p-0.5 shadow-lg shadow-sky-500/25 shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full rounded-full bg-[#07090e] flex items-center justify-center text-xs font-black tracking-tighter text-sky-400 font-mono">
+                        AF
                     </div>
-                    <div>
-                        <span class="text-2xl font-black tracking-tight text-white font-mono">Short<span class="text-rose-500">AF</span></span>
-                        <span class="ml-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 uppercase tracking-widest">Savage Mode</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-extrabold tracking-tight text-white group-hover:text-sky-400 transition-colors leading-tight font-mono">Short<span class="text-sky-400">AF</span></span>
+                    <div class="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono leading-none pt-0.5">
+                        <span class="pulsing-dot"></span>
+                        <span class="font-bold">Loom Engine Live</span>
                     </div>
+                </div>
+            </a>
+
+            <!-- Technical Spec Badges -->
+            <div class="hidden xl:flex items-center gap-2 text-[11px] font-mono">
+                <span class="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-300 border border-sky-500/20">Java 21 Loom</span>
+                <span class="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">Guava Bloom Barrier</span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">L1 Caffeine &lt;0.1ms</span>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="flex items-center gap-2">
+                <button onclick="scrollToSection('architecture-section')" class="mac-dock-item hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-sky-400"></i>
+                    <span>ARCHITECTURE</span>
+                </button>
+                <button onclick="scrollToSection('analytics-section')" class="mac-dock-item hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
+                    <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>TELEMETRY</span>
+                </button>
+                <a href="/admin" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 hover:scale-105 active:scale-95 transition-all shadow-sm font-mono">
+                    <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>DICTATOR CONSOLE</span>
                 </a>
             </div>
-
-            <!-- Overkill Tech Badges -->
-            <div class="hidden lg:flex items-center space-x-2 text-xs">
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-emerald-400 flex items-center gap-1.5 font-mono">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    10k Loom Threads
-                </span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-purple-300 font-mono">Guava Bloom Bouncer</span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-300 font-mono">L1 Caffeine &lt;0.1ms</span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-amber-300 font-mono">Zero Bloat</span>
-            </div>
-
-            <!-- Navigation Actions -->
-            <div class="flex items-center space-x-2.5">
-                <button onclick="scrollToSection('architecture-section')" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1">
-                    ⚡ Tech Flex
-                </button>
-                <button onclick="scrollToSection('analytics-section')" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1">
-                    🕵️ Stalker Mode
-                </button>
-                <a href="/admin" class="text-xs sm:text-sm font-bold text-amber-300 hover:text-white px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 transition flex items-center gap-1.5">
-                    👑 Dictator Mode
-                </a>
-            </div>
-        </div>
+        </nav>
     </header>
 
     <!-- Main Content Area -->
-    <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+    <main class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 space-y-16">
 
-        <!-- Hero Section (Roasting Bloated URLs) -->
-        <section class="text-center max-w-3xl mx-auto space-y-8 pt-4">
-            <div class="space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                    <span>💀</span> Stop sending URLs that look like a whole Wikipedia essay
-                </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-                    Links So Crisp, They Are <br/>
-                    <span class="text-gradient">Literally ShortAF.</span>
-                </h1>
-                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                    Your marketing team gave you a 500-word UTM tracking monstrosity. It looks like malware, your crush won’t open it, and your recruiter thinks they’re getting phished. <strong class="text-slate-200">Drop that garbage here and let us butcher the bloat.</strong>
-                </p>
+        <!-- Hero Section -->
+        <section class="text-center max-w-3xl mx-auto space-y-6 pt-4">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold bg-sky-500/10 text-sky-300 border border-sky-500/25 shadow-sm">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-400"></i>
+                <span>Distributed Sub-Millisecond URL Execution</span>
             </div>
 
-            <!-- URL Shortener Card -->
-            <div class="bg-slate-900/90 border border-slate-800/90 rounded-2xl p-5 sm:p-7 shadow-2xl backdrop-blur-md text-left transition hover:border-slate-700/80">
-                <form id="shortenForm" onsubmit="handleShorten(event)" class="space-y-4">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                Stop Sending Bloated URLs. <br/>
+                <span class="bg-gradient-to-r from-sky-400 via-emerald-300 to-purple-400 bg-clip-text text-transparent">Make Them ShortAF.</span>
+            </h1>
+
+            <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Your marketing team gave you a 500-word tracking monstrosity. It looks like malware, your crush won’t open it, and your recruiter thinks they’re getting phished. <strong class="text-slate-200">Drop that garbage here and butcher the bloat.</strong>
+            </p>
+
+            <!-- Apple Glass Shortener Card -->
+            <div class="apple-glass-card p-6 sm:p-8 text-left mt-6 relative" id="heroCard">
+                <div class="specular-glow"></div>
+
+                <form id="shortenForm" onsubmit="handleShorten(event)" class="space-y-5 relative z-10">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                                <span>🔗</span> Paste Your Bloated Monstrosity
+                            <label class="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                <i data-lucide="link" class="w-3.5 h-3.5 text-sky-400"></i>
+                                <span>Paste Bloated Destination URL</span>
                             </label>
-                            <span class="text-[11px] text-slate-500 italic">Don't be shy, we've seen uglier links</span>
+                            <span class="text-[11px] text-slate-500 font-mono italic">Don't be shy, we've seen uglier</span>
                         </div>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                            </div>
-                            <input type="url" id="originalUrl" required
-                                   placeholder="https://shady-site.com/offer?utm_source=facebook&utm_campaign=broke_dev&token=69420..."
-                                   class="w-full pl-11 pr-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm sm:text-base font-mono">
-                        </div>
+                        <input type="url" id="originalUrl" required
+                               placeholder="https://shady-site.com/offer?utm_source=facebook&utm_campaign=broke_dev&token=69420..."
+                               class="apple-glass-input w-full px-4 py-3.5 rounded-xl text-white placeholder-slate-600 text-sm font-mono">
                     </div>
 
-                    <!-- Custom Alias & Expiration Config -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <!-- Custom Alias & TTL Config -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Custom Alias</label>
-                                <span class="text-[10px] text-rose-400 font-mono">pure flex</span>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="text-xs font-mono font-medium text-slate-400">Custom Alias</label>
+                                <span class="text-[10px] text-sky-400 font-mono">vanity flex</span>
                             </div>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs sm:text-sm font-mono">/</span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs font-mono">/</span>
                                 <input type="text" id="customAlias" placeholder="hire-me-pls" pattern="^[a-zA-Z0-9_-]{3,32}$"
-                                       class="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm font-mono">
+                                       class="apple-glass-input w-full pl-7 pr-3 py-2.5 rounded-lg text-xs font-mono text-white placeholder-slate-600">
                             </div>
                         </div>
+
                         <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Link Lifespan</label>
-                                <span class="text-[10px] text-slate-500">TTL</span>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="text-xs font-mono font-medium text-slate-400">Lifespan</label>
+                                <span class="text-[10px] text-emerald-400 font-mono">TTL</span>
                             </div>
-                            <select id="ttlDays" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm">
-                                <option value="">Forever (Until the heat death of universe)</option>
+                            <select id="ttlDays" class="apple-glass-input w-full px-3 py-2.5 rounded-lg text-xs font-mono text-white">
+                                <option value="">Forever (Until heat death of the universe)</option>
                                 <option value="1">1 Day (Flash sale panic / post-nut clarity)</option>
                                 <option value="7">7 Days (Average dev sprint duration)</option>
                                 <option value="30">30 Days (Enough time to get an offer letter)</option>
@@ -166,36 +159,38 @@
                     </div>
 
                     <button type="submit" id="shortenBtn"
-                            class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
-                        <span id="btnText">🔥 Butcher The Bloat & Shorten</span>
-                        <div id="btnSpinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            class="shimmer-btn w-full py-4 px-6 rounded-xl text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 cursor-pointer mt-2 font-mono tracking-wider">
+                        <i data-lucide="scissors" class="w-4 h-4 text-white"></i>
+                        <span id="btnText">BUTCHER THE BLOAT</span>
+                        <div id="btnSpinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     </button>
                 </form>
 
-                <!-- Feedback / Error Banner -->
-                <div id="alertBox" class="hidden mt-4 p-3.5 rounded-xl text-sm font-medium"></div>
+                <!-- Feedback Banner -->
+                <div id="alertBox" class="hidden mt-4 p-3.5 rounded-xl text-xs font-mono"></div>
 
                 <!-- Result Card -->
-                <div id="resultCard" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-950 rounded-xl border border-rose-500/30">
+                <div id="resultCard" class="hidden mt-6 pt-6 border-t border-white/10 space-y-4 relative z-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#07090e]/80 border border-sky-500/30">
                         <div class="overflow-hidden">
-                            <span class="text-xs text-rose-400 font-bold uppercase tracking-wider block flex items-center gap-1.5">
-                                <span>🎉</span> Boom. Your link is now ShortAF:
+                            <span class="text-[11px] text-sky-400 font-mono font-bold block flex items-center gap-1.5">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                ShortAF Link Ready:
                             </span>
-                            <a id="shortUrlLink" href="#" target="_blank" class="text-lg font-black text-white hover:text-rose-400 transition truncate block font-mono mt-0.5">
-                                https://shortaf.onrender.com/xyz123
+                            <a id="shortUrlLink" href="#" target="_blank" class="text-base sm:text-lg font-black text-white hover:text-sky-300 transition truncate block font-mono mt-0.5 underline underline-offset-4">
+                                https://short.af/xyz123
                             </a>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <button onclick="copyToClipboard()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-                                <span id="copyBtnText">Copy & Go Flex</span>
+                            <button onclick="copyToClipboard()" class="px-3.5 py-2 bg-white/10 hover:bg-white/15 text-white rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition border border-white/10 cursor-pointer">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-sky-400"></i>
+                                <span id="copyBtnText">Copy</span>
                             </button>
-                            <button onclick="toggleQrModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition" title="Show QR">
-                                📱 QR (For Boomers)
+                            <button onclick="toggleQrModal()" class="px-3 py-2 bg-white/10 hover:bg-white/15 text-slate-300 rounded-lg text-xs font-mono font-medium transition border border-white/10 cursor-pointer" title="QR Code">
+                                QR (For Boomers)
                             </button>
-                            <button onclick="loadAnalyticsFromCurrent()" class="px-3 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 rounded-lg text-xs font-bold transition">
-                                🕵️ Stalk Clicks
+                            <button onclick="loadAnalyticsFromCurrent()" class="px-3 py-2 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 rounded-lg text-xs font-mono font-bold transition border border-sky-500/30 cursor-pointer">
+                                Stalk Clicks
                             </button>
                         </div>
                     </div>
@@ -205,104 +200,118 @@
 
         <!-- QR Code Modal -->
         <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xs w-full text-center space-y-4">
-                <h3 class="text-base font-bold text-white flex items-center justify-center gap-1.5">
-                    <span>📱</span> Scan Like It's 2026
+            <div class="apple-glass-card p-6 rounded-2xl max-w-xs w-full text-center space-y-4 shadow-2xl">
+                <h3 class="text-sm font-mono font-bold text-white flex items-center justify-center gap-1.5">
+                    <i data-lucide="qr-code" class="w-4 h-4 text-sky-400"></i>
+                    <span>Scan Like It's 2026</span>
                 </h3>
                 <div id="qrcode" class="p-3 bg-white rounded-xl inline-block shadow-inner"></div>
                 <p id="qrUrlText" class="text-xs text-slate-400 break-all font-mono"></p>
-                <button onclick="toggleQrModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-bold text-white transition">Close</button>
+                <button onclick="toggleQrModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-mono font-bold text-white transition cursor-pointer">Close</button>
             </div>
         </div>
 
-        <!-- Real-Time Stalker Analytics Section -->
-        <section id="analytics-section" class="space-y-6 pt-6 border-t border-slate-800/80">
+        <!-- Real-Time Stalker Telemetry Section -->
+        <section id="analytics-section" class="space-y-6 pt-6 border-t border-white/10">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
-                        <span>🕵️ Stalker Mode Telemetry (Who actually clicked?)</span>
+                        <i data-lucide="crosshair" class="w-5 h-5 text-sky-400"></i>
+                        <span>Stalker Mode Telemetry (Who Clicked?)</span>
                     </h2>
-                    <p class="text-slate-400 text-sm">Because we all know you click your own link 47 times from 3 different phones just to test if the counter works.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">
+                        Because we all know you click your own link 47 times from 3 phones just to test if the counter works.
+                    </p>
                 </div>
                 <div class="flex items-center gap-2 max-w-xs w-full">
                     <input type="text" id="analyticsCodeInput" placeholder="Enter short code (e.g. q0U)"
-                           class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-rose-500">
-                    <button onclick="fetchAnalytics()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold shrink-0 transition">
+                           class="apple-glass-input w-full px-3 py-2 rounded-lg text-xs font-mono">
+                    <button onclick="fetchAnalytics()" class="px-4 py-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg text-xs font-mono shrink-0 transition cursor-pointer">
                         Spy
                     </button>
                 </div>
             </div>
 
-            <!-- Analytics KPI Metrics Cards -->
+            <!-- KPI Cards -->
             <div id="analyticsKpiRow" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Victims Who Clicked</span>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-xs text-slate-400 font-mono">Victims Who Clicked</span>
                     <p id="kpiClicks" class="text-3xl font-black text-white mt-1 font-mono">-</p>
-                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Ingested in 0.002s</span>
+                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1 font-mono">● Ingested in 0.002s</span>
                 </div>
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Top Stalker Country</span>
-                    <p id="kpiCountry" class="text-2xl font-black text-rose-400 mt-1">-</p>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-xs text-slate-400 font-mono">Top Stalker Country</span>
+                    <p id="kpiCountry" class="text-2xl font-bold text-sky-400 mt-1 font-mono">-</p>
                     <span class="text-[11px] text-slate-500 mt-1">Geo Location</span>
                 </div>
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Potato or iPhone?</span>
-                    <p id="kpiDevice" class="text-2xl font-black text-purple-400 mt-1">-</p>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-xs text-slate-400 font-mono">Potato or iPhone?</span>
+                    <p id="kpiDevice" class="text-2xl font-bold text-purple-400 mt-1 font-mono">-</p>
                     <span class="text-[11px] text-slate-500 mt-1">Device Snobbery</span>
                 </div>
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Link Pulse</span>
-                    <p id="kpiStatus" class="text-2xl font-black text-white mt-1">-</p>
-                    <span id="kpiExpiry" class="text-[11px] text-slate-500 mt-1">TTL status</span>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-xs text-slate-400 font-mono">Link Pulse</span>
+                    <p id="kpiStatus" class="text-2xl font-bold text-white mt-1">-</p>
+                    <span id="kpiExpiry" class="text-[11px] text-slate-500 mt-1 font-mono">TTL status</span>
                 </div>
             </div>
 
             <!-- Charts Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Country Breakdown Chart -->
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
-                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-1.5">
-                        <span>🌍</span> Geographic Origin of Victims
+                <div class="apple-glass-card p-5">
+                    <div class="specular-glow"></div>
+                    <h3 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-400"></i>
+                        <span>Geographic Origin of Victims</span>
                     </h3>
-                    <div class="h-56 relative flex items-center justify-center">
+                    <div class="h-52 relative flex items-center justify-center">
                         <canvas id="countryChart"></canvas>
-                        <p id="countryEmptyText" class="text-xs text-slate-500">Zero clicks recorded. Go send your link to someone bro.</p>
+                        <p id="countryEmptyText" class="text-xs text-slate-500 font-mono">Zero clicks recorded. Send the link to someone bro.</p>
                     </div>
                 </div>
 
                 <!-- Device Breakdown Chart -->
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
-                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-1.5">
-                        <span>📱</span> Device & Browser Snobbery
+                <div class="apple-glass-card p-5">
+                    <div class="specular-glow"></div>
+                    <h3 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>Device & Browser Breakdown</span>
                     </h3>
-                    <div class="h-56 relative flex items-center justify-center">
+                    <div class="h-52 relative flex items-center justify-center">
                         <canvas id="deviceChart"></canvas>
-                        <p id="deviceEmptyText" class="text-xs text-slate-500">Zero clicks recorded yet.</p>
+                        <p id="deviceEmptyText" class="text-xs text-slate-500 font-mono">Zero clicks recorded yet.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Telemetry Log Table -->
-            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 overflow-hidden">
-                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
-                    <span>📡</span> Live Click Stream (Recent 20 Audit Events)
+            <!-- Recent Telemetry Table -->
+            <div class="apple-glass-card p-5 overflow-hidden">
+                <div class="specular-glow"></div>
+                <h3 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-sky-400"></i>
+                    <span>Recent 20 Victims (GDPR-Safe Hashed Telemetry)</span>
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="text-slate-500 border-b border-slate-800 uppercase font-medium font-mono text-[11px]">
+                        <thead class="text-slate-500 border-b border-white/10 font-mono text-[11px]">
                             <tr>
                                 <th class="py-2.5 px-3">Timestamp</th>
                                 <th class="py-2.5 px-3">Country</th>
                                 <th class="py-2.5 px-3">Device</th>
                                 <th class="py-2.5 px-3">Browser</th>
                                 <th class="py-2.5 px-3">Referer</th>
-                                <th class="py-2.5 px-3">IP Hash (GDPR-Safe)</th>
+                                <th class="py-2.5 px-3">Anonymized Hash</th>
                             </tr>
                         </thead>
-                        <tbody id="telemetryTableBody" class="divide-y divide-slate-800/60 font-mono">
+                        <tbody id="telemetryTableBody" class="divide-y divide-white/5 font-mono">
                             <tr>
-                                <td colspan="6" class="py-4 text-center text-slate-500 font-sans">
-                                    Click a short link to trigger the asynchronous telemetry ingestion stream!
+                                <td colspan="6" class="py-6 text-center text-slate-500 font-sans">
+                                    Click on a short link to trigger the async ingestion stream!
                                 </td>
                             </tr>
                         </tbody>
@@ -311,79 +320,113 @@
             </div>
         </section>
 
-        <!-- System Architecture & Technical Flex Section -->
-        <section id="architecture-section" class="space-y-6 pt-6 border-t border-slate-800/80">
+        <!-- System Architecture Deep-Dive & Terminal Stream -->
+        <section id="architecture-section" class="space-y-6 pt-6 border-t border-white/10">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
-                        <span>⚡ Ridiculously Over-Engineered For No Reason</span>
+                        <i data-lucide="cpu" class="w-6 h-6 text-sky-400"></i>
+                        <span>Ridiculously Over-Engineered For No Reason</span>
                     </h2>
-                    <p class="text-slate-400 text-sm">
-                        Could this have been a 10-line Python script on a $5 potato server? <span class="text-slate-200">Yes.</span> Did we build a distributed Java 21 Loom engine with dual-tier Caffeine caching, Guava Bloom Filter bouncers, and async ring buffer batch ingestion just to stunt on people in System Design interviews? <span class="text-rose-400 font-bold">ABSOLUTELY.</span>
+                    <p class="text-slate-400 text-xs sm:text-sm">
+                        Could this have been a 10-line Python script on a $5 potato server? <span class="text-slate-200">Yes.</span> Did we build a distributed Java 21 Loom engine with dual-tier Caffeine caching, Guava Bloom Filter bouncers, and async ring buffer batch ingestion just to flex in System Design interviews? <span class="text-emerald-400 font-bold">ABSOLUTELY.</span>
                     </p>
                 </div>
-                <button onclick="fetchSystemTelemetry()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition self-start sm:self-auto">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    Refresh Vitals
+                <button onclick="fetchSystemTelemetry()" class="px-3.5 py-1.5 bg-white/10 hover:bg-white/15 text-slate-300 rounded-full text-xs font-mono font-bold flex items-center gap-1.5 border border-white/10 transition self-start sm:self-auto cursor-pointer">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Refresh Vitals</span>
                 </button>
             </div>
 
-            <!-- Live Engine Vitals Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Virtual Threads</span>
-                    <p class="text-xl font-bold text-emerald-400 mt-1 flex items-center gap-1.5 font-mono">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <!-- Vitals Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-[11px] text-slate-400 font-mono">Virtual Threads</span>
+                    <p class="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-1.5 font-mono">
+                        <span class="pulsing-dot"></span>
                         Active
                     </p>
-                    <span class="text-[11px] text-slate-500 mt-1">Java 21 Loom Concurrency</span>
+                    <span class="text-[10px] text-slate-500 font-mono">Java 21 Loom Concurrency</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">L1 Caffeine Cache</span>
-                    <p id="telemetryL1Entries" class="text-xl font-bold text-rose-400 mt-1 font-mono">0 keys</p>
-                    <span class="text-[11px] text-slate-500 mt-1">&lt; 0.05ms read path</span>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-[11px] text-slate-400 font-mono">L1 Caffeine Cache</span>
+                    <p id="telemetryL1Entries" class="text-lg font-bold text-sky-400 mt-1 font-mono">0 keys</p>
+                    <span class="text-[10px] text-slate-500 font-mono">&lt; 0.05ms read path</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Guava Bloom Bouncer</span>
-                    <p id="telemetryBloomCount" class="text-xl font-bold text-purple-400 mt-1 font-mono">0 items</p>
-                    <span class="text-[11px] text-slate-500 mt-1">1% FPP Crawler Shield</span>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-[11px] text-slate-400 font-mono">Guava Bloom Bouncer</span>
+                    <p id="telemetryBloomCount" class="text-lg font-bold text-purple-400 mt-1 font-mono">0 items</p>
+                    <span class="text-[10px] text-slate-500 font-mono">1% FPP Crawler Shield</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Async Ring Buffer</span>
-                    <p id="telemetryQueueDepth" class="text-xl font-bold text-amber-400 mt-1 font-mono">0 queued</p>
-                    <span class="text-[11px] text-slate-500 mt-1">Batch Flusher Active</span>
+                <div class="apple-glass-card p-4">
+                    <div class="specular-glow"></div>
+                    <span class="text-[11px] text-slate-400 font-mono">Async Ring Buffer</span>
+                    <p id="telemetryQueueDepth" class="text-lg font-bold text-amber-400 mt-1 font-mono">0 queued</p>
+                    <span class="text-[10px] text-slate-500 font-mono">Batch Ingestion</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 col-span-2 md:col-span-1">
-                    <span class="text-xs text-slate-400 font-medium">JVM Heap Memory</span>
-                    <p id="telemetryMemory" class="text-xl font-bold text-white mt-1 font-mono">- / - MB</p>
-                    <span class="text-[11px] text-slate-500 mt-1">Container Sized</span>
+                <div class="apple-glass-card p-4 col-span-2 md:col-span-1">
+                    <div class="specular-glow"></div>
+                    <span class="text-[11px] text-slate-400 font-mono">JVM Heap Memory</span>
+                    <p id="telemetryMemory" class="text-lg font-bold text-white mt-1 font-mono">- / - MB</p>
+                    <span class="text-[10px] text-slate-500 font-mono">Container Sized</span>
+                </div>
+            </div>
+
+            <!-- Live Loom Terminal Engine Window -->
+            <div class="terminal-window p-5 text-left transition-all duration-300">
+                <!-- Terminal Header -->
+                <div class="flex items-center justify-between pb-3 border-b border-white/10 text-xs text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        <span class="ml-2 font-mono text-[11px] text-slate-400">shortaf@loom-core ~ (java-21-loom)</span>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1">
+                        <span class="pulsing-dot"></span>
+                        LOOM VIRTUAL THREADS ACTIVE
+                    </span>
+                </div>
+
+                <!-- Streaming Logs Container -->
+                <div id="terminal-logs" class="pt-3 h-48 overflow-y-auto space-y-2 font-mono text-xs select-text">
+                    <!-- Streamed dynamically by JS -->
                 </div>
             </div>
 
             <!-- Architecture Breakdown Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
-                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
-                    <span class="font-bold text-rose-400 text-sm flex items-center gap-1.5">
-                        <span>🔮</span> 1. The Bloom Filter Bouncer
+                <div class="apple-glass-card p-5 space-y-2">
+                    <div class="specular-glow"></div>
+                    <span class="font-bold text-sky-400 text-sm font-mono flex items-center gap-1.5">
+                        <i data-lucide="shield" class="w-4 h-4 text-sky-400"></i>
+                        <span>1. Bloom Filter Bouncer</span>
                     </span>
-                    <p class="text-slate-400 leading-relaxed">
-                        When scraper bots spam millions of non-existent URLs trying to exhaust the database, the Guava Bloom Filter hits them with a cold <code class="text-rose-300">"Tu jaa re"</code> directly in JVM memory. 100% negative guarantee. 0 database queries. Postgres stays chilling.
+                    <p class="text-slate-400 leading-relaxed text-xs">
+                        When scraper bots spam millions of non-existent URLs, the Guava Bloom Filter hits them with a cold <code class="text-sky-300">"Tu jaa re"</code> directly in JVM memory. 100% negative guarantee. 0 database queries. Postgres stays chilling.
                     </p>
                 </div>
-                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
-                    <span class="font-bold text-purple-400 text-sm flex items-center gap-1.5">
-                        <span>🧵</span> 2. Project Loom Virtual Threads
+                <div class="apple-glass-card p-5 space-y-2">
+                    <div class="specular-glow"></div>
+                    <span class="font-bold text-purple-400 text-sm font-mono flex items-center gap-1.5">
+                        <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i>
+                        <span>2. Loom Virtual Threads</span>
                     </span>
-                    <p class="text-slate-400 leading-relaxed">
+                    <p class="text-slate-400 leading-relaxed text-xs">
                         Spins up 10,000 lightweight virtual threads faster than you can close an uninvited Jira ticket. Serves massive redirect spikes without exhausting OS carrier threads and stays under 200MB RAM.
                     </p>
                 </div>
-                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
-                    <span class="font-bold text-amber-400 text-sm flex items-center gap-1.5">
-                        <span>🎟️</span> 3. KGS Database Monopoly
+                <div class="apple-glass-card p-5 space-y-2">
+                    <div class="specular-glow"></div>
+                    <span class="font-bold text-emerald-400 text-sm font-mono flex items-center gap-1.5">
+                        <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
+                        <span>3. KGS Range Monopoly</span>
                     </span>
-                    <p class="text-slate-400 leading-relaxed">
-                        We hijack blocks of 10,000 IDs from Postgres atomically with <code class="text-amber-300">SELECT FOR UPDATE</code>. For the next 9,999 links, we ghost the database completely and allocate IDs in sub-microseconds via in-memory AtomicLong.
+                    <p class="text-slate-400 leading-relaxed text-xs">
+                        We hijack blocks of 10,000 IDs from Postgres atomically with <code class="text-emerald-300">SELECT FOR UPDATE</code>. For the next 9,999 links, we ghost the database completely and allocate in-memory via AtomicLong.
                     </p>
                 </div>
             </div>
@@ -392,9 +435,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 space-y-2">
-        <p class="font-mono text-slate-400">ShortAF 🔥 • Built with pure caffeine, zero sleep, and excessive Java 21 Loom threads by <strong class="text-white">Akshat</strong>.</p>
-        <p class="text-slate-600">Production Ready on Render & Docker • Sub-millisecond redirects at scale</p>
+    <footer class="relative z-10 border-t border-white/10 py-8 text-center text-xs text-slate-500 space-y-2 font-mono">
+        <p class="text-slate-400">ShortAF • Built with pure caffeine, zero sleep, and excessive Java 21 Loom threads by <strong class="text-white">Akshat Jaiswal</strong>.</p>
+        <p class="text-slate-600">Matched to the Portfolio Apple-Grade Glassmorphism Architecture</p>
     </footer>
 
     <!-- Client-Side JavaScript -->
@@ -403,10 +446,96 @@
         let countryChartInstance = null;
         let deviceChartInstance = null;
 
+        // Initialize Lucide Icons & Specular Glow
         window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+            initSpecularGlowAndTilt();
+            initTerminalStream();
             fetchSystemTelemetry();
             setInterval(fetchSystemTelemetry, 15000);
         });
+
+        function initSpecularGlowAndTilt() {
+            const cards = document.querySelectorAll('.apple-glass-card');
+
+            cards.forEach(card => {
+                let glow = card.querySelector('.specular-glow');
+                if (!glow) {
+                    glow = document.createElement('div');
+                    glow.className = 'specular-glow';
+                    card.appendChild(glow);
+                }
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    glow.style.left = `${x}px`;
+                    glow.style.top = `${y}px`;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -4;
+                    const rotateY = ((x - centerX) / centerX) * 4;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+                });
+            });
+        }
+
+        // Live Simulated Terminal Stream of Engine Internals
+        function initTerminalStream() {
+            const terminalLogs = document.getElementById('terminal-logs');
+            if (!terminalLogs) return;
+
+            const simulatedLogs = [
+                { tag: "LOOM", color: "text-emerald-400", msg: "VirtualThreadExecutor: Spawning Loom lightweight carrier thread #10842" },
+                { tag: "BLOOM", color: "text-purple-400", msg: "GuavaBloomFilter: Shielded Postgres from bot query (1M slots, 0.01 FPP)" },
+                { tag: "L1-HIT", color: "text-sky-400", msg: "CaffeineCache: Hit shortCode 'q0U' in 0.02ms (Direct JVM Memory Path)" },
+                { tag: "KGS-RANGE", color: "text-emerald-400", msg: "RangeAllocator: Acquired block [10001 - 20000] via SELECT FOR UPDATE" },
+                { tag: "RING-BUFFER", color: "text-amber-400", msg: "AnalyticsRingBuffer: Flushed 50 telemetry events to Postgres in 1.8ms" },
+                { tag: "RATE-LIMIT", color: "text-sky-300", msg: "TokenBucket: Refilled 10 tokens for hashed client (0 contention)" },
+                { tag: "ENCODE", color: "text-purple-400", msg: "Base62Encoder: Compressed 64-bit integer into 6-character short code" },
+                { tag: "GDPR", color: "text-rose-400", msg: "TelemetryIngest: SHA-256 salted IP hash anonymized before DB write" }
+            ];
+
+            let logIndex = 0;
+
+            function addLog() {
+                const item = simulatedLogs[logIndex % simulatedLogs.length];
+                logIndex++;
+
+                const logEntry = document.createElement('div');
+                logEntry.className = 'flex items-start gap-2 text-slate-300 leading-relaxed';
+                const time = new Date().toTimeString().split(' ')[0];
+
+                logEntry.innerHTML = `
+                    <span class="text-slate-500 select-none">${time}</span>
+                    <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${item.color} bg-white/5 border border-white/10 shrink-0">${item.tag}</span>
+                    <span class="truncate">${item.msg}</span>
+                `;
+
+                terminalLogs.appendChild(logEntry);
+
+                while (terminalLogs.children.length > 25) {
+                    terminalLogs.removeChild(terminalLogs.firstChild);
+                }
+
+                terminalLogs.scrollTop = terminalLogs.scrollHeight;
+            }
+
+            // Initial batch
+            for (let i = 0; i < 4; i++) {
+                addLog();
+            }
+
+            setInterval(addLog, 2800);
+        }
 
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
@@ -425,7 +554,7 @@
             const ttlDays = document.getElementById('ttlDays').value;
 
             btn.disabled = true;
-            btnText.textContent = "🪓 Chopping off tracking garbage...";
+            btnText.textContent = "CHOPPING OFF BLOAT...";
             btnSpinner.classList.remove('hidden');
             alertBox.classList.add('hidden');
 
@@ -459,32 +588,35 @@
                 qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
                     text: data.shortUrl,
-                    width: 180,
-                    height: 180,
-                    colorDark: "#020617",
+                    width: 170,
+                    height: 170,
+                    colorDark: "#07090e",
                     colorLight: "#ffffff"
                 });
                 document.getElementById('qrUrlText').textContent = data.shortUrl;
                 document.getElementById('analyticsCodeInput').value = data.shortCode;
 
-                showAlert('🔥 Link successfully de-bloated & pre-warmed in L1 Cache!', 'success');
+                showToast('✓ Link butchered & pre-warmed in L1 Cache!', 'success');
+                showAlert('✓ Link successfully de-bloated & pre-warmed in L1 Cache!', 'success');
                 fetchSystemTelemetry();
             } catch (err) {
-                showAlert(err.message, 'error');
+                showAlert('✕ ' + err.message, 'error');
+                showToast(err.message, 'error');
             } finally {
                 btn.disabled = false;
-                btnText.textContent = "🔥 Butcher The Bloat & Shorten";
+                btnText.textContent = "BUTCHER THE BLOAT";
                 btnSpinner.classList.add('hidden');
+                if (window.lucide) lucide.createIcons();
             }
         }
 
         function showAlert(msg, type) {
             const alertBox = document.getElementById('alertBox');
-            alertBox.classList.remove('hidden', 'bg-red-500/10', 'border-red-500/20', 'text-red-400', 'bg-emerald-500/10', 'border-emerald-500/20', 'text-emerald-400');
+            alertBox.classList.remove('hidden', 'bg-rose-500/10', 'border-rose-500/30', 'text-rose-400', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-400');
             if (type === 'error') {
-                alertBox.classList.add('bg-red-500/10', 'border', 'border-red-500/20', 'text-red-400');
+                alertBox.classList.add('bg-rose-500/10', 'border', 'border-rose-500/30', 'text-rose-400');
             } else {
-                alertBox.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500/20', 'text-emerald-400');
+                alertBox.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500/30', 'text-emerald-400');
             }
             alertBox.textContent = msg;
         }
@@ -493,8 +625,9 @@
             const linkElem = document.getElementById('shortUrlLink');
             navigator.clipboard.writeText(linkElem.textContent.trim()).then(() => {
                 const btnText = document.getElementById('copyBtnText');
-                btnText.textContent = '🚀 Copied! Stop clicking me bro.';
-                setTimeout(() => { btnText.textContent = 'Copy & Go Flex'; }, 2200);
+                btnText.textContent = 'Copied! Stop clicking me bro.';
+                showToast('Copied to clipboard!', 'success');
+                setTimeout(() => { btnText.textContent = 'Copy'; }, 2200);
             });
         }
 
@@ -514,7 +647,7 @@
         async function fetchAnalytics() {
             const code = document.getElementById('analyticsCodeInput').value.trim();
             if (!code) {
-                alert('Bro enter a short code first');
+                showToast('Enter a short code first bro', 'error');
                 return;
             }
 
@@ -527,8 +660,9 @@
 
                 const data = await response.json();
                 renderAnalytics(data);
+                showToast(`Loaded telemetry for /${code}`, 'success');
             } catch (err) {
-                alert('Stalker Error: ' + err.message);
+                showToast('Stalker Error: ' + err.message, 'error');
             }
         }
 
@@ -542,7 +676,7 @@
             document.getElementById('kpiDevice').textContent = devices.length > 0 ? devices[0] : 'None yet';
 
             document.getElementById('kpiStatus').textContent = data.expired ? 'Dead 💀' : 'Alive & Kicking 🔥';
-            document.getElementById('kpiStatus').className = `text-2xl font-black mt-1 ${data.expired ? 'text-red-400' : 'text-emerald-400'}`;
+            document.getElementById('kpiStatus').className = `text-2xl font-bold mt-1 font-mono ${data.expired ? 'text-slate-500' : 'text-emerald-400'}`;
             document.getElementById('kpiExpiry').textContent = data.expiresAt ? 'Expires: ' + new Date(data.expiresAt).toLocaleDateString() : 'Immortal (Never expires)';
 
             renderCountryChart(data.countryBreakdown || {});
@@ -556,11 +690,11 @@
             } else {
                 data.recentEvents.forEach(event => {
                     const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-800/40 transition";
+                    tr.className = "hover:bg-white/5 transition";
                     const formattedTime = new Date(event.timestamp).toLocaleTimeString();
                     tr.innerHTML = `
                         <td class="py-2.5 px-3 text-slate-400">${formattedTime}</td>
-                        <td class="py-2.5 px-3 font-semibold text-rose-400">${event.country || 'Unknown'}</td>
+                        <td class="py-2.5 px-3 font-semibold text-sky-400">${event.country || 'Unknown'}</td>
                         <td class="py-2.5 px-3 text-slate-300">${event.deviceType || 'Desktop'}</td>
                         <td class="py-2.5 px-3 text-slate-300">${event.browser || 'Chrome'}</td>
                         <td class="py-2.5 px-3 text-slate-400 truncate max-w-[120px]">${event.referer || 'Direct / Chat'}</td>
@@ -593,7 +727,7 @@
                     datasets: [{
                         label: 'Victims',
                         data: values,
-                        backgroundColor: '#f43f5e',
+                        backgroundColor: '#38bdf8',
                         borderRadius: 6
                     }]
                 },
@@ -603,7 +737,7 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
-                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', precision: 0 } }
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', precision: 0 } }
                     }
                 }
             });
@@ -630,7 +764,7 @@
                     labels: labels,
                     datasets: [{
                         data: values,
-                        backgroundColor: ['#f43f5e', '#a855f7', '#06b6d4', '#10b981'],
+                        backgroundColor: ['#38bdf8', '#10b981', '#a855f7', '#f43f5e'],
                         borderWidth: 0
                     }]
                 },
@@ -657,6 +791,36 @@
             } catch (e) {
                 console.error("Telemetry error", e);
             }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'apple-glass-toast';
+
+            let iconName = 'info';
+            let iconColor = 'text-sky-400';
+            if (type === 'success') {
+                iconName = 'check-circle-2';
+                iconColor = 'text-emerald-400';
+            } else if (type === 'error') {
+                iconName = 'alert-triangle';
+                iconColor = 'text-rose-400';
+            }
+
+            toast.innerHTML = `
+                <i data-lucide="${iconName}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            if (window.lucide) lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px) scale(0.95)';
+                setTimeout(() => toast.remove(), 350);
+            }, 3200);
         }
     </script>
 </body>
