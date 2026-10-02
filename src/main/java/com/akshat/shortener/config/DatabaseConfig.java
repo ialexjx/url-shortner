@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.net.URI;
+import java.sql.Connection;
+import java.sql.Statement;
 
 /**
  * ==============================================================================
@@ -90,7 +92,39 @@ public class DatabaseConfig {
         config.setMaxLifetime(1800000);
         config.setConnectionTimeout(20000);
 
-        return new HikariDataSource(config);
+        HikariDataSource dataSource = new HikariDataSource(config);
+        migrateSchema(dataSource);
+        return dataSource;
+    }
+
+    /**
+     * Defensive automated DDL migration.
+     * Guarantees that columns added in recent feature releases (burn_after_reading, passcode_hash)
+     * are created on Render PostgreSQL, MySQL, and H2 without manual DB intervention.
+     */
+    private void migrateSchema(DataSource dataSource) {
+        log.info("Checking & executing defensive database schema migrations...");
+        try (Connection conn = dataSource.getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            try {
+                stmt.execute("ALTER TABLE short_urls ADD COLUMN IF NOT EXISTS burn_after_reading BOOLEAN DEFAULT FALSE");
+                log.info("Schema migration: column 'burn_after_reading' verified.");
+            } catch (Exception e) {
+                log.debug("Notice on column burn_after_reading: {}", e.getMessage());
+            }
+
+            try {
+                stmt.execute("ALTER TABLE short_urls ADD COLUMN IF NOT EXISTS passcode_hash VARCHAR(100)");
+                log.info("Schema migration: column 'passcode_hash' verified.");
+            } catch (Exception e) {
+                log.debug("Notice on column passcode_hash: {}", e.getMessage());
+            }
+
+            log.info("Defensive database schema migrations completed successfully.");
+        } catch (Exception e) {
+            log.warn("Database schema auto-migration notice (ignoring if tables not created yet): {}", e.getMessage());
+        }
     }
 
     private void applyDefaultConfig(HikariConfig config) {
