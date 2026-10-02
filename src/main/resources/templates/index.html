@@ -232,6 +232,21 @@
                 </div>
             </div>
 
+            <!-- Stalking Targets Quick-Switcher Bar -->
+            <div id="targetsContainer" class="hidden apple-glass-card p-3 sm:p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 border border-white/10">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-mono font-bold text-slate-300 flex items-center gap-1.5 shrink-0 mr-1">
+                        <i data-lucide="crosshair" class="w-3.5 h-3.5 text-sky-400"></i>
+                        <span>Targets:</span>
+                    </span>
+                    <div id="targetPills" class="flex flex-wrap items-center gap-2"></div>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] text-emerald-400 font-mono shrink-0">
+                    <span class="pulsing-dot"></span>
+                    <span>Live 3s Poller</span>
+                </div>
+            </div>
+
             <!-- KPI Cards -->
             <div id="analyticsKpiRow" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="apple-glass-card p-4">
@@ -436,13 +451,18 @@
 
     <!-- Footer -->
     <footer class="relative z-10 border-t border-white/10 py-8 text-center text-xs text-slate-500 space-y-2 font-mono">
-        <p class="text-slate-400">ShortAF • Built with pure caffeine, zero sleep, and excessive Java 21 Loom threads by <strong class="text-white">Akshat Jaiswal</strong>.</p>
-        <p class="text-slate-600">Matched to the Portfolio Apple-Grade Glassmorphism Architecture</p>
+        <p class="text-slate-300">
+            Engineered with zero patience & aggressive Loom threads by <a href="https://github.com/ialexjx" target="_blank" class="text-white font-bold hover:text-sky-400 transition underline underline-offset-4 decoration-sky-500/40">Akshat Jaiswal</a>.
+        </p>
+        <p class="text-slate-500 text-[11px]">
+            ShortAF • Butchering bloated links so your chat doesn't look like a 300-char suicide note. If it breaks, skill issue.
+        </p>
     </footer>
 
     <!-- Client-Side JavaScript -->
     <script>
         let latestShortCode = '';
+        let activeShortCode = '';
         let countryChartInstance = null;
         let deviceChartInstance = null;
 
@@ -453,7 +473,70 @@
             initTerminalStream();
             fetchSystemTelemetry();
             setInterval(fetchSystemTelemetry, 15000);
+
+            // Auto-load recent targets from localStorage
+            const links = getUserLinks();
+            if (links.length > 0) {
+                selectTarget(links[0].shortCode);
+            }
+
+            // Live 3-second auto-poller for selected stalking target
+            setInterval(() => {
+                if (activeShortCode) {
+                    fetchAnalytics(activeShortCode, true);
+                }
+            }, 3000);
         });
+
+        function getUserLinks() {
+            try {
+                return JSON.parse(localStorage.getItem('shortaf_user_links') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveUserLink(shortCode, originalUrl) {
+            let links = getUserLinks();
+            links = links.filter(l => l.shortCode !== shortCode);
+            links.unshift({ shortCode, originalUrl, createdAt: new Date().toISOString() });
+            if (links.length > 8) links.pop();
+            localStorage.setItem('shortaf_user_links', JSON.stringify(links));
+            renderTargetPills();
+        }
+
+        function renderTargetPills() {
+            const container = document.getElementById('targetsContainer');
+            const pillsDiv = document.getElementById('targetPills');
+            const links = getUserLinks();
+
+            if (!links || links.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            pillsDiv.innerHTML = '';
+
+            links.forEach(l => {
+                const btn = document.createElement('button');
+                const isActive = (l.shortCode === activeShortCode);
+                btn.className = isActive
+                    ? "px-3 py-1 rounded-full text-xs font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm flex items-center gap-1.5 transition cursor-pointer"
+                    : "px-3 py-1 rounded-full text-xs font-mono text-slate-400 bg-white/5 border border-white/10 hover:text-white hover:border-white/20 transition cursor-pointer flex items-center gap-1.5";
+                btn.innerHTML = `<span class="${isActive ? 'text-sky-400' : 'text-slate-500'}">/</span><span>${l.shortCode}</span>`;
+                btn.onclick = () => selectTarget(l.shortCode);
+                pillsDiv.appendChild(btn);
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function selectTarget(shortCode) {
+            activeShortCode = shortCode;
+            document.getElementById('analyticsCodeInput').value = shortCode;
+            renderTargetPills();
+            fetchAnalytics(shortCode, false);
+        }
 
         function initSpecularGlowAndTilt() {
             const cards = document.querySelectorAll('.apple-glass-card');
@@ -496,7 +579,7 @@
             const simulatedLogs = [
                 { tag: "LOOM", color: "text-emerald-400", msg: "VirtualThreadExecutor: Spawning Loom lightweight carrier thread #10842" },
                 { tag: "BLOOM", color: "text-purple-400", msg: "GuavaBloomFilter: Shielded Postgres from bot query (1M slots, 0.01 FPP)" },
-                { tag: "L1-HIT", color: "text-sky-400", msg: "CaffeineCache: Hit shortCode 'q0U' in 0.02ms (Direct JVM Memory Path)" },
+                { tag: "L1-HIT", color: "text-sky-400", msg: "CaffeineCache: Hit shortCode in 0.02ms (Direct JVM Memory Path)" },
                 { tag: "KGS-RANGE", color: "text-emerald-400", msg: "RangeAllocator: Acquired block [10001 - 20000] via SELECT FOR UPDATE" },
                 { tag: "RING-BUFFER", color: "text-amber-400", msg: "AnalyticsRingBuffer: Flushed 50 telemetry events to Postgres in 1.8ms" },
                 { tag: "RATE-LIMIT", color: "text-sky-300", msg: "TokenBucket: Refilled 10 tokens for hashed client (0 contention)" },
@@ -578,23 +661,28 @@
                 }
 
                 latestShortCode = data.shortCode;
+                // Hostname matching the exact browser origin
+                const browserShortUrl = `${window.location.origin}/${data.shortCode}`;
                 const linkElem = document.getElementById('shortUrlLink');
-                linkElem.href = data.shortUrl;
-                linkElem.textContent = data.shortUrl;
+                linkElem.href = browserShortUrl;
+                linkElem.textContent = browserShortUrl;
 
                 resultCard.classList.remove('hidden');
 
                 const qrContainer = document.getElementById('qrcode');
                 qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
-                    text: data.shortUrl,
+                    text: browserShortUrl,
                     width: 170,
                     height: 170,
                     colorDark: "#07090e",
                     colorLight: "#ffffff"
                 });
-                document.getElementById('qrUrlText').textContent = data.shortUrl;
-                document.getElementById('analyticsCodeInput').value = data.shortCode;
+                document.getElementById('qrUrlText').textContent = browserShortUrl;
+
+                // Save link to targets and auto-select in telemetry
+                saveUserLink(data.shortCode, data.originalUrl);
+                selectTarget(data.shortCode);
 
                 showToast('✓ Link butchered & pre-warmed in L1 Cache!', 'success');
                 showAlert('✓ Link successfully de-bloated & pre-warmed in L1 Cache!', 'success');
@@ -638,21 +726,21 @@
 
         function loadAnalyticsFromCurrent() {
             if (latestShortCode) {
-                document.getElementById('analyticsCodeInput').value = latestShortCode;
-                fetchAnalytics();
+                selectTarget(latestShortCode);
                 scrollToSection('analytics-section');
             }
         }
 
-        async function fetchAnalytics() {
-            const code = document.getElementById('analyticsCodeInput').value.trim();
-            if (!code) {
-                showToast('Enter a short code first bro', 'error');
+        async function fetchAnalytics(code, silent = false) {
+            const targetCode = code || document.getElementById('analyticsCodeInput').value.trim();
+            if (!targetCode) {
+                if (!silent) showToast('Enter a short code first bro', 'error');
                 return;
             }
+            activeShortCode = targetCode;
 
             try {
-                const response = await fetch(`/api/v1/analytics/${code}`);
+                const response = await fetch(`/api/v1/analytics/${targetCode}`);
                 if (!response.ok) {
                     const err = await response.json();
                     throw new Error(err.message || 'Analytics not found');
@@ -660,9 +748,9 @@
 
                 const data = await response.json();
                 renderAnalytics(data);
-                showToast(`Loaded telemetry for /${code}`, 'success');
+                if (!silent) showToast(`Loaded telemetry for /${targetCode}`, 'success');
             } catch (err) {
-                showToast('Stalker Error: ' + err.message, 'error');
+                if (!silent) showToast('Stalker Error: ' + err.message, 'error');
             }
         }
 

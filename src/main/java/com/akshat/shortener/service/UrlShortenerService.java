@@ -198,10 +198,15 @@ public class UrlShortenerService {
     /**
      * Analytics Aggregation for Dashboard
      */
-    @Transactional(readOnly = true)
     public AnalyticsResponse getAnalytics(String shortCode) {
+        // 1. In-flight buffer events ko DB me sync flush kar do taaki real-time telemetry turant dikhe
+        analyticsBufferService.flushBatch();
+
         ShortUrl shortUrl = shortUrlRepository.findByShortCode(shortCode)
                 .orElseThrow(() -> new ResourceNotFoundException("Short code '" + shortCode + "' ke liye analytics nahi mila."));
+
+        long eventCount = clickEventRepository.countByShortCode(shortCode);
+        long totalClicks = Math.max(shortUrl.getClickCount() != null ? shortUrl.getClickCount() : 0L, eventCount);
 
         Map<String, Long> countryBreakdown = mapAggregations(clickEventRepository.countClicksByCountry(shortCode));
         Map<String, Long> deviceBreakdown = mapAggregations(clickEventRepository.countClicksByDeviceType(shortCode));
@@ -219,7 +224,7 @@ public class UrlShortenerService {
                 .createdAt(shortUrl.getCreatedAt())
                 .expiresAt(shortUrl.getExpiresAt())
                 .isExpired(shortUrl.isExpired())
-                .totalClicks(shortUrl.getClickCount())
+                .totalClicks(totalClicks)
                 .countryBreakdown(countryBreakdown)
                 .deviceBreakdown(deviceBreakdown)
                 .refererBreakdown(refererBreakdown)

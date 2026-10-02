@@ -30,7 +30,7 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
      * aur SELECT queries ka load padta hai. Direct in-place UPDATE query se
      * database lock contention 95% kam ho jata hai.
      */
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE ShortUrl s SET s.clickCount = s.clickCount + :delta WHERE s.shortCode = :shortCode")
     int incrementClickCount(@Param("shortCode") String shortCode, @Param("delta") long delta);
 

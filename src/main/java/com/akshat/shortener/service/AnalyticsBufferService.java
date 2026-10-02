@@ -176,7 +176,11 @@ public class AnalyticsBufferService {
     }
 
     private String extractCountry(HttpServletRequest request) {
-        if (request == null) return "Local/Unknown";
+        if (request == null) return "Localhost / Dev";
+        String clientIp = extractClientIp(request);
+        if ("127.0.0.1".equals(clientIp) || "0:0:0:0:0:0:0:1".equals(clientIp)) {
+            return "Localhost / Dev";
+        }
         // Cloudflare ya Render proxy headers
         String cfCountry = request.getHeader("CF-IPCountry");
         if (cfCountry != null && !cfCountry.isEmpty()) {
@@ -186,7 +190,11 @@ public class AnalyticsBufferService {
         if (xCountry != null && !xCountry.isEmpty()) {
             return xCountry;
         }
-        return "Unknown";
+        String xForwardedCountry = request.getHeader("X-Forwarded-Country");
+        if (xForwardedCountry != null && !xForwardedCountry.isEmpty()) {
+            return xForwardedCountry;
+        }
+        return "India / Cloud";
     }
 
     private String hashIp(String ip) {
