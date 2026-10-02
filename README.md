@@ -1,4 +1,4 @@
-# ⚡ ScaleLink | Distributed High-Throughput URL Shortener Engine
+# 🔥 ShortAF | Links So Short They Actually Get Clicked
 
 [![Java](https://img.shields.io/badge/Java-21%20LTS-orange.svg)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
@@ -8,7 +8,7 @@
 [![Docker](https://img.shields.io/badge/Deployment-Docker%20%7C%20Render-informational.svg)](https://render.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **ScaleLink** is an enterprise-grade, distributed URL shortener engine designed to handle massive write and redirect throughput. Built with modern System Design patterns: **Distributed Range ID Allocator (KGS Pattern)**, **Guava Probabilistic Bloom Filter**, **L1/L2 Dual-Tier Caching**, **Java 21 Project Loom (Virtual Threads)**, and an **Asynchronous Ring Buffer** for telemetry ingestion.
+> **ShortAF** is an absurdly high-throughput, distributed URL butchering engine built for developers who are tired of sending 500-word tracking essays disguised as links. Engineered with **Distributed Range ID Allocation (KGS Pattern)**, **Guava Probabilistic Bloom Filter Bouncer**, **L1/L2 Dual-Tier Caching**, **Java 21 Project Loom (Virtual Threads)**, and an **Asynchronous Ring Buffer** for FBI-grade telemetry ingestion. Zero bloat. Sub-millisecond execution. 100% savage.
 
 ---
 

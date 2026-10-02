@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScaleLink | Admin Operations Console</title>
+    <title>ShortAF 👑 | The Dictator Console</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,10 +12,9 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
+                        fire: {
+                            500: '#f43f5e',
+                            600: '#e11d48',
                         }
                     }
                 }
@@ -23,21 +22,19 @@
         }
     </script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white antialiased">
 
     <!-- Top Navigation Header -->
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <a href="/" class="flex items-center space-x-2">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
+                <a href="/" class="flex items-center space-x-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                        <span class="text-xl">👑</span>
                     </div>
                     <div>
-                        <span class="text-lg font-bold tracking-tight text-white">ScaleLink</span>
-                        <span class="ml-1.5 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Admin Portal</span>
+                        <span class="text-xl font-black tracking-tight text-white font-mono">Short<span class="text-rose-500">AF</span></span>
+                        <span class="ml-1.5 text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider">Dictator Console</span>
                     </div>
                 </a>
             </div>
@@ -45,12 +42,12 @@
             <!-- Admin Key & Navigation Links -->
             <div class="flex items-center space-x-3">
                 <div class="hidden sm:flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs">
-                    <span class="text-slate-400">Admin Key:</span>
+                    <span class="text-slate-400">Master Key:</span>
                     <input type="password" id="adminKeyInput" value="admin123" placeholder="admin123"
-                           class="bg-transparent border-0 text-amber-400 font-mono focus:outline-none w-24 text-xs">
-                    <button onclick="saveAdminKey()" class="text-slate-400 hover:text-white transition" title="Apply Key">✓</button>
+                           class="bg-transparent border-0 text-amber-400 font-mono focus:outline-none w-24 text-xs font-bold">
+                    <button onclick="saveAdminKey()" class="text-slate-400 hover:text-white transition font-bold" title="Apply Key">✓</button>
                 </div>
-                <a href="/" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1.5">
+                <a href="/" class="text-xs sm:text-sm font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                     Public Shortener
                 </a>
@@ -61,67 +58,67 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-        <!-- Banner with Demo Notice -->
-        <div class="bg-gradient-to-r from-amber-500/10 via-slate-900 to-indigo-500/10 border border-amber-500/20 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <!-- Savage Banner with Demo Notice -->
+        <div class="bg-gradient-to-r from-amber-500/10 via-slate-900 to-rose-500/10 border border-amber-500/20 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="space-y-1">
-                <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <span>🛡️ Global URL Management & Governance</span>
+                <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                    <span>👑 Absolute Link Authority & Governance</span>
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-400">
-                    Search, inspect, deactivate phishing links, or permanently prune database records.
+                    Where links go to die when someone abuses the free tier or sends shady phishing garbage.
                 </p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-                <span class="text-xs px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono">
+                <span class="text-xs px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-bold">
                     Portfolio Demo Key: <strong>admin123</strong>
                 </span>
-                <button onclick="loadAdminData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
+                <button onclick="loadAdminData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1 transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     Refresh
                 </button>
             </div>
         </div>
 
-        <!-- Admin Overview Metrics Cards -->
+        <!-- Metrics Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Total URLs</span>
-                <p id="statTotalUrls" class="text-2xl font-extrabold text-white mt-1">-</p>
-                <span class="text-[11px] text-slate-500 mt-1">Database Records</span>
+                <span class="text-xs text-slate-400 font-medium">Bloated Links Butchered</span>
+                <p id="statTotalUrls" class="text-3xl font-black text-white mt-1 font-mono">-</p>
+                <span class="text-[11px] text-slate-500 mt-1">Postgres Records</span>
             </div>
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Global Clicks</span>
-                <p id="statTotalClicks" class="text-2xl font-extrabold text-indigo-400 mt-1">-</p>
-                <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Aggregated</span>
+                <span class="text-xs text-slate-400 font-medium">Global Clicks Ingested</span>
+                <p id="statTotalClicks" class="text-3xl font-black text-rose-400 mt-1 font-mono">-</p>
+                <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● In-Memory Batch Aggregated</span>
             </div>
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">Active Links</span>
-                <p id="statActiveUrls" class="text-2xl font-extrabold text-emerald-400 mt-1">-</p>
-                <span id="statInactiveSub" class="text-[11px] text-slate-500 mt-1">- inactive</span>
+                <span class="text-xs text-slate-400 font-medium">Active vs Banished</span>
+                <p id="statActiveUrls" class="text-3xl font-black text-emerald-400 mt-1 font-mono">-</p>
+                <span id="statInactiveSub" class="text-[11px] text-slate-500 mt-1">- banished</span>
             </div>
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                <span class="text-xs text-slate-400 font-medium">L1 Cache / Memory</span>
-                <p id="statL1Memory" class="text-2xl font-extrabold text-purple-400 mt-1">-</p>
+                <span class="text-xs text-slate-400 font-medium">L1 Cache / JVM Memory</span>
+                <p id="statL1Memory" class="text-3xl font-black text-purple-400 mt-1 font-mono">-</p>
                 <span id="statBloomSub" class="text-[11px] text-slate-500 mt-1">Bloom barrier active</span>
             </div>
         </div>
 
-        <!-- Search & Filter Controls -->
+        <!-- Table Container -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="relative flex-1 max-w-md">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
-                    <input type="text" id="searchInput" placeholder="Search by shortCode or destination URL..."
+                    <input type="text" id="searchInput" placeholder="Search shortCode or target URL..."
                            onkeyup="handleSearchKeyup(event)"
-                           class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm">
+                           class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 text-xs sm:text-sm font-mono">
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="triggerSearch()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition">
+                    <button onclick="triggerSearch()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition">
                         Search
                     </button>
-                    <button onclick="clearSearch()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">
+                    <button onclick="clearSearch()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition">
                         Clear
                     </button>
                 </div>
@@ -130,20 +127,20 @@
             <!-- Table -->
             <div class="overflow-x-auto rounded-xl border border-slate-800/80">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-950 text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-800">
+                    <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
                         <tr>
                             <th class="py-3 px-3">Short Code</th>
-                            <th class="py-3 px-3">Original Destination</th>
+                            <th class="py-3 px-3">Destination URL</th>
                             <th class="py-3 px-3">Clicks</th>
                             <th class="py-3 px-3">Created</th>
                             <th class="py-3 px-3">Status</th>
-                            <th class="py-3 px-3 text-right">Actions</th>
+                            <th class="py-3 px-3 text-right">Dictator Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="urlTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40">
+                    <tbody id="urlTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40 font-mono">
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-slate-500">
-                                Loading URLs...
+                            <td colspan="6" class="py-8 text-center text-slate-500 font-sans">
+                                Loading directory of links...
                             </td>
                         </tr>
                     </tbody>
@@ -151,15 +148,15 @@
             </div>
 
             <!-- Pagination Bar -->
-            <div class="flex items-center justify-between pt-2 text-xs text-slate-400">
+            <div class="flex items-center justify-between pt-2 text-xs text-slate-400 font-mono">
                 <span id="pageInfo">Showing page 1</span>
                 <div class="flex items-center space-x-2">
                     <button id="prevBtn" onclick="changePage(-1)" disabled
-                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition">
+                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition font-bold">
                         Previous
                     </button>
                     <button id="nextBtn" onclick="changePage(1)" disabled
-                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition">
+                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition font-bold">
                         Next
                     </button>
                 </div>
@@ -169,8 +166,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
-        ScaleLink Admin Console • Secure URL Governance & Lifecycle Engine
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 font-mono">
+        ShortAF Dictator Console • Supreme Authority & Lifecycle Control
     </footer>
 
     <!-- Script -->
@@ -186,7 +183,7 @@
         function saveAdminKey() {
             const key = document.getElementById('adminKeyInput').value.trim();
             localStorage.setItem('scalelink_admin_key', key);
-            alert('Admin key updated! Reloading data...');
+            alert('Master Key updated! Reloading console data...');
             loadAdminData();
         }
 
@@ -213,7 +210,7 @@
                 document.getElementById('statTotalUrls').textContent = Number(data.totalUrls || 0).toLocaleString();
                 document.getElementById('statTotalClicks').textContent = Number(data.totalClicks || 0).toLocaleString();
                 document.getElementById('statActiveUrls').textContent = Number(data.activeUrls || 0).toLocaleString();
-                document.getElementById('statInactiveSub').textContent = `${data.inactiveUrls || 0} deactivated`;
+                document.getElementById('statInactiveSub').textContent = `${data.inactiveUrls || 0} banished`;
                 document.getElementById('statL1Memory').textContent = `${data.l1CacheEntries || 0} keys`;
                 document.getElementById('statBloomSub').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB JVM`;
             } catch (err) {
@@ -233,7 +230,7 @@
 
                 const res = await fetch(url);
                 if (res.status === 401) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-400">Invalid Admin Key! Please enter valid key in the top bar (Demo: admin123).</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-rose-400 font-sans">Invalid Master Key! Enter valid key in the top bar (Demo: admin123).</td></tr>`;
                     return;
                 }
                 if (!res.ok) throw new Error('Failed to fetch URLs');
@@ -245,7 +242,7 @@
                 renderTable(data.content);
                 updatePagination(data);
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-400">${err.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-rose-400 font-sans">${err.message}</td></tr>`;
             }
         }
 
@@ -254,7 +251,7 @@
             tbody.innerHTML = '';
 
             if (!urls || urls.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500">No URLs found matching your criteria.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500 font-sans">No URLs found matching your criteria.</td></tr>`;
                 return;
             }
 
@@ -264,28 +261,28 @@
 
                 let statusBadge = '';
                 if (!u.active) {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px]">Deactivated</span>';
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px]">Banished</span>';
                 } else if (u.expired) {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 text-[10px]">Expired</span>';
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px]">Dead</span>';
                 } else {
-                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Active</span>';
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Alive</span>';
                 }
 
                 const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
 
                 tr.innerHTML = `
                     <td class="py-3 px-3 font-mono font-bold text-white">
-                        <a href="/${u.shortCode}" target="_blank" class="hover:text-indigo-400 transition underline underline-offset-2">
+                        <a href="/${u.shortCode}" target="_blank" class="hover:text-rose-400 transition underline underline-offset-2">
                             ${u.shortCode}
                         </a>
-                        ${u.customAlias ? '<span class="ml-1 text-[9px] text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded">custom</span>' : ''}
+                        ${u.customAlias ? '<span class="ml-1 text-[9px] text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">flex</span>' : ''}
                     </td>
                     <td class="py-3 px-3 max-w-xs truncate text-slate-300" title="${u.originalUrl}">
                         <a href="${u.originalUrl}" target="_blank" class="hover:text-white transition">
                             ${u.originalUrl}
                         </a>
                     </td>
-                    <td class="py-3 px-3 font-semibold text-slate-200">
+                    <td class="py-3 px-3 font-bold text-slate-200">
                         ${Number(u.clickCount || 0).toLocaleString()}
                     </td>
                     <td class="py-3 px-3 text-slate-400 text-[11px]">
@@ -295,11 +292,11 @@
                         ${statusBadge}
                     </td>
                     <td class="py-3 px-3 text-right space-x-1 shrink-0">
-                        <button onclick="toggleStatus('${u.shortCode}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-medium transition">
-                            ${u.active ? 'Deactivate' : 'Activate'}
+                        <button onclick="toggleStatus('${u.shortCode}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-bold transition">
+                            ${u.active ? 'Banish' : 'Revive'}
                         </button>
-                        <button onclick="deleteLink('${u.shortCode}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded text-[11px] font-medium transition">
-                            Delete
+                        <button onclick="deleteLink('${u.shortCode}')" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded text-[11px] font-bold transition">
+                            Nuke
                         </button>
                     </td>
                 `;
@@ -345,7 +342,7 @@
                 const res = await fetch(`/api/v1/admin/urls/${shortCode}/toggle?key=${encodeURIComponent(key)}`, {
                     method: 'POST'
                 });
-                if (!res.ok) throw new Error('Toggle failed');
+                if (!res.ok) throw new Error('Action failed');
                 loadAdminData();
             } catch (err) {
                 alert('Action failed: ' + err.message);
@@ -353,7 +350,7 @@
         }
 
         async function deleteLink(shortCode) {
-            if (!confirm(`Kya aap short link '${shortCode}' ko permanently delete karna chahte hain?`)) {
+            if (!confirm(`Are you sure you want to NUKE link '${shortCode}' into digital oblivion?`)) {
                 return;
             }
             const key = getAdminKey();
@@ -361,10 +358,10 @@
                 const res = await fetch(`/api/v1/admin/urls/${shortCode}?key=${encodeURIComponent(key)}`, {
                     method: 'DELETE'
                 });
-                if (!res.ok) throw new Error('Delete failed');
+                if (!res.ok) throw new Error('Nuke failed');
                 loadAdminData();
             } catch (err) {
-                alert('Delete failed: ' + err.message);
+                alert('Nuke failed: ' + err.message);
             }
         }
     </script>

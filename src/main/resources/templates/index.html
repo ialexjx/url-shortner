@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScaleLink | Distributed URL Shortener Engine</title>
+    <title>ShortAF 🔥 | Links So Short They Actually Get Clicked</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js for Telemetry Charts -->
@@ -16,14 +16,15 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#1e1b4b',
+                        fire: {
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        },
+                        cyber: {
+                            purple: '#a855f7',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
                         }
                     }
                 }
@@ -31,58 +32,68 @@
         }
     </script>
     <style>
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(1.05); }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.08); }
         }
-        .glow-bg {
-            animation: pulse-slow 8s infinite ease-in-out;
+        .glow-effect {
+            animation: pulse-glow 7s infinite ease-in-out;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .border-gradient {
+            border-image: linear-gradient(to right, #f43f5e, #a855f7) 1;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white antialiased">
 
-    <!-- Background Ambient Glow -->
+    <!-- Ambient Neon Cyber Glow -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="glow-bg absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-indigo-600/20 blur-[130px] rounded-full"></div>
-        <div class="glow-bg absolute top-96 -left-20 w-[500px] h-[400px] bg-purple-600/15 blur-[120px] rounded-full"></div>
+        <div class="glow-effect absolute -top-40 left-1/2 -translate-x-1/2 w-[750px] h-[550px] bg-rose-600/20 blur-[140px] rounded-full"></div>
+        <div class="glow-effect absolute top-96 -left-32 w-[550px] h-[450px] bg-purple-600/15 blur-[130px] rounded-full"></div>
+        <div class="glow-effect absolute bottom-20 -right-20 w-[500px] h-[400px] bg-cyan-600/10 blur-[130px] rounded-full"></div>
     </div>
 
     <!-- Top Navigation Header -->
-    <header class="relative z-10 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-xl sticky top-0">
+    <header class="relative z-20 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                    </svg>
-                </div>
-                <div>
-                    <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">ScaleLink</span>
-                    <span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v1.0 Prod</span>
-                </div>
+                <a href="/" class="flex items-center space-x-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-pink-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-500/30">
+                        <span class="text-xl">🔥</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-white font-mono">Short<span class="text-rose-500">AF</span></span>
+                        <span class="ml-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 uppercase tracking-widest">Savage Mode</span>
+                    </div>
+                </a>
             </div>
 
-            <!-- Architecture Tech Badges -->
-            <div class="hidden md:flex items-center space-x-2 text-xs">
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-emerald-400 flex items-center gap-1.5">
+            <!-- Overkill Tech Badges -->
+            <div class="hidden lg:flex items-center space-x-2 text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-emerald-400 flex items-center gap-1.5 font-mono">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    Java 21 Loom
+                    10k Loom Threads
                 </span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">L1/L2 Dual Cache</span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-purple-300">Guava Bloom Barrier</span>
-                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-amber-300">Async Telemetry</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-purple-300 font-mono">Guava Bloom Bouncer</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-300 font-mono">L1 Caffeine &lt;0.1ms</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-amber-300 font-mono">Zero Bloat</span>
             </div>
 
-            <div class="flex items-center space-x-3">
-                <button onclick="scrollToSection('architecture-section')" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition">
-                    ⚡ Telemetry
+            <!-- Navigation Actions -->
+            <div class="flex items-center space-x-2.5">
+                <button onclick="scrollToSection('architecture-section')" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1">
+                    ⚡ Tech Flex
                 </button>
-                <button onclick="scrollToSection('analytics-section')" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition">
-                    📊 Analytics
+                <button onclick="scrollToSection('analytics-section')" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1">
+                    🕵️ Stalker Mode
                 </button>
-                <a href="/admin" class="text-xs sm:text-sm font-medium text-amber-300 hover:text-white px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 transition flex items-center gap-1">
-                    🛡️ Admin
+                <a href="/admin" class="text-xs sm:text-sm font-bold text-amber-300 hover:text-white px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 transition flex items-center gap-1.5">
+                    👑 Dictator Mode
                 </a>
             </div>
         </div>
@@ -91,86 +102,100 @@
     <!-- Main Content Area -->
     <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
 
-        <!-- Hero & URL Shortening Card -->
+        <!-- Hero Section (Roasting Bloated URLs) -->
         <section class="text-center max-w-3xl mx-auto space-y-8 pt-4">
             <div class="space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    Sub-millisecond High Throughput Architecture
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                    <span>💀</span> Stop sending URLs that look like a whole Wikipedia essay
                 </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                    Shorten URLs at <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Scale</span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                    Links So Crisp, They Are <br/>
+                    <span class="text-gradient">Literally ShortAF.</span>
                 </h1>
-                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-                    Built with distributed <strong>Range ID Allocation (KGS)</strong>, <strong>Dual L1/L2 Caching</strong>, and probabilistic <strong>Guava Bloom Filters</strong> for zero-downtime redirects.
+                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                    Your marketing team gave you a 500-word UTM tracking monstrosity. It looks like malware, your crush won’t open it, and your recruiter thinks they’re getting phished. <strong class="text-slate-200">Drop that garbage here and let us butcher the bloat.</strong>
                 </p>
             </div>
 
-            <!-- Shorten Input Box Card -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl backdrop-blur-md text-left transition hover:border-slate-700">
+            <!-- URL Shortener Card -->
+            <div class="bg-slate-900/90 border border-slate-800/90 rounded-2xl p-5 sm:p-7 shadow-2xl backdrop-blur-md text-left transition hover:border-slate-700/80">
                 <form id="shortenForm" onsubmit="handleShorten(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Destination URL</label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                <span>🔗</span> Paste Your Bloated Monstrosity
+                            </label>
+                            <span class="text-[11px] text-slate-500 italic">Don't be shy, we've seen uglier links</span>
+                        </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                             </div>
-                            <input type="url" id="originalUrl" required placeholder="https://your-long-domain.com/campaign/offer/xyz?ref=portfolio"
-                                   class="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm sm:text-base">
+                            <input type="url" id="originalUrl" required
+                                   placeholder="https://shady-site.com/offer?utm_source=facebook&utm_campaign=broke_dev&token=69420..."
+                                   class="w-full pl-11 pr-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm sm:text-base font-mono">
                         </div>
                     </div>
 
-                    <!-- Advanced Config (Custom Alias & TTL) -->
+                    <!-- Custom Alias & Expiration Config -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Custom Alias <span class="text-slate-500 font-normal lowercase">(optional)</span></label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Custom Alias</label>
+                                <span class="text-[10px] text-rose-400 font-mono">pure flex</span>
+                            </div>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs sm:text-sm">/</span>
-                                <input type="text" id="customAlias" placeholder="my-resume" pattern="^[a-zA-Z0-9_-]{3,32}$"
-                                       class="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs sm:text-sm font-mono">/</span>
+                                <input type="text" id="customAlias" placeholder="hire-me-pls" pattern="^[a-zA-Z0-9_-]{3,32}$"
+                                       class="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm font-mono">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Link Expiration <span class="text-slate-500 font-normal lowercase">(optional)</span></label>
-                            <select id="ttlDays" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-                                <option value="">Never Expires</option>
-                                <option value="1">1 Day</option>
-                                <option value="7">7 Days</option>
-                                <option value="30">30 Days</option>
-                                <option value="90">90 Days</option>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Link Lifespan</label>
+                                <span class="text-[10px] text-slate-500">TTL</span>
+                            </div>
+                            <select id="ttlDays" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm">
+                                <option value="">Forever (Until the heat death of universe)</option>
+                                <option value="1">1 Day (Flash sale panic / post-nut clarity)</option>
+                                <option value="7">7 Days (Average dev sprint duration)</option>
+                                <option value="30">30 Days (Enough time to get an offer letter)</option>
+                                <option value="90">90 Days (Quarterly corporate hopium)</option>
                             </select>
                         </div>
                     </div>
 
                     <button type="submit" id="shortenBtn"
-                            class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition duration-200 flex items-center justify-center gap-2">
-                        <span id="btnText">Shorten Link</span>
+                            class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
+                        <span id="btnText">🔥 Butcher The Bloat & Shorten</span>
                         <div id="btnSpinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     </button>
                 </form>
 
                 <!-- Feedback / Error Banner -->
-                <div id="alertBox" class="hidden mt-4 p-3.5 rounded-xl text-sm"></div>
+                <div id="alertBox" class="hidden mt-4 p-3.5 rounded-xl text-sm font-medium"></div>
 
-                <!-- Result Card (Populated on success) -->
+                <!-- Result Card -->
                 <div id="resultCard" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-950 rounded-xl border border-indigo-500/30">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-950 rounded-xl border border-rose-500/30">
                         <div class="overflow-hidden">
-                            <span class="text-xs text-indigo-400 font-medium block">Shortened Link Ready</span>
-                            <a id="shortUrlLink" href="#" target="_blank" class="text-lg font-bold text-white hover:text-indigo-300 transition truncate block">
-                                https://scalelink.onrender.com/xyz123
+                            <span class="text-xs text-rose-400 font-bold uppercase tracking-wider block flex items-center gap-1.5">
+                                <span>🎉</span> Boom. Your link is now ShortAF:
+                            </span>
+                            <a id="shortUrlLink" href="#" target="_blank" class="text-lg font-black text-white hover:text-rose-400 transition truncate block font-mono mt-0.5">
+                                https://shortaf.onrender.com/xyz123
                             </a>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <button onclick="copyToClipboard()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                            <button onclick="copyToClipboard()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-                                <span id="copyBtnText">Copy</span>
+                                <span id="copyBtnText">Copy & Go Flex</span>
                             </button>
-                            <button onclick="toggleQrModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition" title="Show QR Code">
-                                QR Code
+                            <button onclick="toggleQrModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition" title="Show QR">
+                                📱 QR (For Boomers)
                             </button>
-                            <button onclick="loadAnalyticsFromCurrent()" class="px-3 py-2 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 rounded-lg text-xs font-semibold transition">
-                                Analytics
+                            <button onclick="loadAnalyticsFromCurrent()" class="px-3 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 rounded-lg text-xs font-bold transition">
+                                🕵️ Stalk Clicks
                             </button>
                         </div>
                     </div>
@@ -179,54 +204,56 @@
         </section>
 
         <!-- QR Code Modal -->
-        <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xs w-full text-center space-y-4">
-                <h3 class="text-base font-bold text-white">QR Code</h3>
-                <div id="qrcode" class="p-3 bg-white rounded-xl inline-block"></div>
-                <p id="qrUrlText" class="text-xs text-slate-400 break-all"></p>
-                <button onclick="toggleQrModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-semibold text-white transition">Close</button>
+                <h3 class="text-base font-bold text-white flex items-center justify-center gap-1.5">
+                    <span>📱</span> Scan Like It's 2026
+                </h3>
+                <div id="qrcode" class="p-3 bg-white rounded-xl inline-block shadow-inner"></div>
+                <p id="qrUrlText" class="text-xs text-slate-400 break-all font-mono"></p>
+                <button onclick="toggleQrModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-bold text-white transition">Close</button>
             </div>
         </div>
 
-        <!-- Real-Time Analytics Dashboard Section -->
+        <!-- Real-Time Stalker Analytics Section -->
         <section id="analytics-section" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <span>📊 Real-Time Click Telemetry & Analytics</span>
+                    <h2 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                        <span>🕵️ Stalker Mode Telemetry (Who actually clicked?)</span>
                     </h2>
-                    <p class="text-slate-400 text-sm">Asynchronous batch telemetry ingested with zero redirect latency impact.</p>
+                    <p class="text-slate-400 text-sm">Because we all know you click your own link 47 times from 3 different phones just to test if the counter works.</p>
                 </div>
                 <div class="flex items-center gap-2 max-w-xs w-full">
-                    <input type="text" id="analyticsCodeInput" placeholder="Enter short code (e.g. wU1)"
-                           class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <button onclick="fetchAnalytics()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shrink-0 transition">
-                        Inspect
+                    <input type="text" id="analyticsCodeInput" placeholder="Enter short code (e.g. q0U)"
+                           class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    <button onclick="fetchAnalytics()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold shrink-0 transition">
+                        Spy
                     </button>
                 </div>
             </div>
 
             <!-- Analytics KPI Metrics Cards -->
             <div id="analyticsKpiRow" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Total Clicks</span>
-                    <p id="kpiClicks" class="text-2xl font-extrabold text-white mt-1">-</p>
-                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Live Telemetry</span>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Victims Who Clicked</span>
+                    <p id="kpiClicks" class="text-3xl font-black text-white mt-1 font-mono">-</p>
+                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Ingested in 0.002s</span>
                 </div>
-                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Top Country</span>
-                    <p id="kpiCountry" class="text-2xl font-extrabold text-indigo-400 mt-1">-</p>
-                    <span class="text-[11px] text-slate-500 mt-1">Geo Distribution</span>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Top Stalker Country</span>
+                    <p id="kpiCountry" class="text-2xl font-black text-rose-400 mt-1">-</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Geo Location</span>
                 </div>
-                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Top Device</span>
-                    <p id="kpiDevice" class="text-2xl font-extrabold text-purple-400 mt-1">-</p>
-                    <span class="text-[11px] text-slate-500 mt-1">User Agent Parsed</span>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Potato or iPhone?</span>
+                    <p id="kpiDevice" class="text-2xl font-black text-purple-400 mt-1">-</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Device Snobbery</span>
                 </div>
-                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Link Status</span>
-                    <p id="kpiStatus" class="text-2xl font-extrabold text-white mt-1">-</p>
-                    <span id="kpiExpiry" class="text-[11px] text-slate-500 mt-1">TTL details</span>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                    <span class="text-xs text-slate-400 font-medium">Link Pulse</span>
+                    <p id="kpiStatus" class="text-2xl font-black text-white mt-1">-</p>
+                    <span id="kpiExpiry" class="text-[11px] text-slate-500 mt-1">TTL status</span>
                 </div>
             </div>
 
@@ -234,42 +261,48 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Country Breakdown Chart -->
                 <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
-                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Country Demographics</h3>
+                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-1.5">
+                        <span>🌍</span> Geographic Origin of Victims
+                    </h3>
                     <div class="h-56 relative flex items-center justify-center">
                         <canvas id="countryChart"></canvas>
-                        <p id="countryEmptyText" class="text-xs text-slate-500">No click events recorded yet</p>
+                        <p id="countryEmptyText" class="text-xs text-slate-500">Zero clicks recorded. Go send your link to someone bro.</p>
                     </div>
                 </div>
 
                 <!-- Device Breakdown Chart -->
                 <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5">
-                    <h3 class="text-sm font-semibold text-slate-300 mb-3">Device & Browser Distribution</h3>
+                    <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-1.5">
+                        <span>📱</span> Device & Browser Snobbery
+                    </h3>
                     <div class="h-56 relative flex items-center justify-center">
                         <canvas id="deviceChart"></canvas>
-                        <p id="deviceEmptyText" class="text-xs text-slate-500">No click events recorded yet</p>
+                        <p id="deviceEmptyText" class="text-xs text-slate-500">Zero clicks recorded yet.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Recent Telemetry Log Table -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 overflow-hidden">
-                <h3 class="text-sm font-semibold text-slate-300 mb-3">Live Click Stream (Recent 20 Audit Events)</h3>
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <span>📡</span> Live Click Stream (Recent 20 Audit Events)
+                </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="text-slate-500 border-b border-slate-800 uppercase font-medium">
+                        <thead class="text-slate-500 border-b border-slate-800 uppercase font-medium font-mono text-[11px]">
                             <tr>
                                 <th class="py-2.5 px-3">Timestamp</th>
                                 <th class="py-2.5 px-3">Country</th>
                                 <th class="py-2.5 px-3">Device</th>
                                 <th class="py-2.5 px-3">Browser</th>
                                 <th class="py-2.5 px-3">Referer</th>
-                                <th class="py-2.5 px-3">IP Hash (GDPR)</th>
+                                <th class="py-2.5 px-3">IP Hash (GDPR-Safe)</th>
                             </tr>
                         </thead>
                         <tbody id="telemetryTableBody" class="divide-y divide-slate-800/60 font-mono">
                             <tr>
                                 <td colspan="6" class="py-4 text-center text-slate-500 font-sans">
-                                    Click on a short link to trigger telemetry recording!
+                                    Click a short link to trigger the asynchronous telemetry ingestion stream!
                                 </td>
                             </tr>
                         </tbody>
@@ -278,75 +311,80 @@
             </div>
         </section>
 
-        <!-- System Architecture & Engineering Telemetry Section -->
+        <!-- System Architecture & Technical Flex Section -->
         <section id="architecture-section" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <span>⚡ Production Architecture & JVM Telemetry</span>
+                    <h2 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                        <span>⚡ Ridiculously Over-Engineered For No Reason</span>
                     </h2>
-                    <p class="text-slate-400 text-sm">Live internal state of the distributed engine (Ideal for Technical Interviews).</p>
+                    <p class="text-slate-400 text-sm">
+                        Could this have been a 10-line Python script on a $5 potato server? <span class="text-slate-200">Yes.</span> Did we build a distributed Java 21 Loom engine with dual-tier Caffeine caching, Guava Bloom Filter bouncers, and async ring buffer batch ingestion just to stunt on people in System Design interviews? <span class="text-rose-400 font-bold">ABSOLUTELY.</span>
+                    </p>
                 </div>
-                <button onclick="fetchSystemTelemetry()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition self-start sm:self-auto">
+                <button onclick="fetchSystemTelemetry()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition self-start sm:self-auto">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    Refresh State
+                    Refresh Vitals
                 </button>
             </div>
 
-            <!-- Live Engine Stats Grid -->
+            <!-- Live Engine Vitals Grid -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
                     <span class="text-xs text-slate-400 font-medium">Virtual Threads</span>
-                    <p class="text-xl font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
+                    <p class="text-xl font-bold text-emerald-400 mt-1 flex items-center gap-1.5 font-mono">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         Active
                     </p>
-                    <span class="text-[11px] text-slate-500 mt-1">Java 21 Loom</span>
+                    <span class="text-[11px] text-slate-500 mt-1">Java 21 Loom Concurrency</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
                     <span class="text-xs text-slate-400 font-medium">L1 Caffeine Cache</span>
-                    <p id="telemetryL1Entries" class="text-xl font-bold text-indigo-400 mt-1">0 keys</p>
-                    <span class="text-[11px] text-slate-500 mt-1">&lt; 0.1ms read latency</span>
+                    <p id="telemetryL1Entries" class="text-xl font-bold text-rose-400 mt-1 font-mono">0 keys</p>
+                    <span class="text-[11px] text-slate-500 mt-1">&lt; 0.05ms read path</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                    <span class="text-xs text-slate-400 font-medium">Guava Bloom Filter</span>
-                    <p id="telemetryBloomCount" class="text-xl font-bold text-purple-400 mt-1">0 items</p>
-                    <span class="text-[11px] text-slate-500 mt-1">1% FPP Barrier</span>
+                    <span class="text-xs text-slate-400 font-medium">Guava Bloom Bouncer</span>
+                    <p id="telemetryBloomCount" class="text-xl font-bold text-purple-400 mt-1 font-mono">0 items</p>
+                    <span class="text-[11px] text-slate-500 mt-1">1% FPP Crawler Shield</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
                     <span class="text-xs text-slate-400 font-medium">Async Ring Buffer</span>
-                    <p id="telemetryQueueDepth" class="text-xl font-bold text-amber-400 mt-1">0 queued</p>
+                    <p id="telemetryQueueDepth" class="text-xl font-bold text-amber-400 mt-1 font-mono">0 queued</p>
                     <span class="text-[11px] text-slate-500 mt-1">Batch Flusher Active</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 col-span-2 md:col-span-1">
                     <span class="text-xs text-slate-400 font-medium">JVM Heap Memory</span>
-                    <p id="telemetryMemory" class="text-xl font-bold text-white mt-1">- / - MB</p>
-                    <span class="text-[11px] text-slate-500 mt-1">Container Optimized</span>
+                    <p id="telemetryMemory" class="text-xl font-bold text-white mt-1 font-mono">- / - MB</p>
+                    <span class="text-[11px] text-slate-500 mt-1">Container Sized</span>
                 </div>
             </div>
 
-            <!-- Architecture Workflow Cards -->
-            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
-                <h3 class="text-base font-bold text-white">How ScaleLink Handles High-Concurrency (System Design Walkthrough)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
-                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                        <span class="font-bold text-indigo-400">1. KGS Range Allocation</span>
-                        <p class="text-slate-400">
-                            Instead of doing slow DB row increments, pods atomically reserve blocks of 10,000 IDs with pessimistic row locks (<code class="text-slate-300">SELECT FOR UPDATE</code>). 9,999 out of 10,000 requests are served in-memory.
-                        </p>
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                        <span class="font-bold text-purple-400">2. Bloom Filter Negative Barrier</span>
-                        <p class="text-slate-400">
-                            Malicious bot crawlers requesting random non-existent URLs are stopped cold at memory layer. If Guava Bloom Filter says NO, it's 100% not in DB—saving thousands of wasted Postgres connections.
-                        </p>
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
-                        <span class="font-bold text-amber-400">3. Async Batch Telemetry</span>
-                        <p class="text-slate-400">
-                            HTTP 302 redirects are sent back to the browser immediately (&lt;5ms). Telemetry is dropped into a bounded ring buffer and flushed in batches of 200 via Java 21 Virtual Threads.
-                        </p>
-                    </div>
+            <!-- Architecture Breakdown Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
+                    <span class="font-bold text-rose-400 text-sm flex items-center gap-1.5">
+                        <span>🔮</span> 1. The Bloom Filter Bouncer
+                    </span>
+                    <p class="text-slate-400 leading-relaxed">
+                        When scraper bots spam millions of non-existent URLs trying to exhaust the database, the Guava Bloom Filter hits them with a cold <code class="text-rose-300">"Tu jaa re"</code> directly in JVM memory. 100% negative guarantee. 0 database queries. Postgres stays chilling.
+                    </p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
+                    <span class="font-bold text-purple-400 text-sm flex items-center gap-1.5">
+                        <span>🧵</span> 2. Project Loom Virtual Threads
+                    </span>
+                    <p class="text-slate-400 leading-relaxed">
+                        Spins up 10,000 lightweight virtual threads faster than you can close an uninvited Jira ticket. Serves massive redirect spikes without exhausting OS carrier threads and stays under 200MB RAM.
+                    </p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-2.5">
+                    <span class="font-bold text-amber-400 text-sm flex items-center gap-1.5">
+                        <span>🎟️</span> 3. KGS Database Monopoly
+                    </span>
+                    <p class="text-slate-400 leading-relaxed">
+                        We hijack blocks of 10,000 IDs from Postgres atomically with <code class="text-amber-300">SELECT FOR UPDATE</code>. For the next 9,999 links, we ghost the database completely and allocate IDs in sub-microseconds via in-memory AtomicLong.
+                    </p>
                 </div>
             </div>
         </section>
@@ -355,8 +393,8 @@
 
     <!-- Footer -->
     <footer class="relative z-10 border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 space-y-2">
-        <p>ScaleLink Distributed URL Shortener Engine • Production Ready for Render & AWS</p>
-        <p>Built with Java 21, Spring Boot 3.5, Caffeine, Redis, Guava & PostgreSQL</p>
+        <p class="font-mono text-slate-400">ShortAF 🔥 • Built with pure caffeine, zero sleep, and excessive Java 21 Loom threads by <strong class="text-white">Akshat</strong>.</p>
+        <p class="text-slate-600">Production Ready on Render & Docker • Sub-millisecond redirects at scale</p>
     </footer>
 
     <!-- Client-Side JavaScript -->
@@ -365,10 +403,8 @@
         let countryChartInstance = null;
         let deviceChartInstance = null;
 
-        // Auto-initialize charts & telemetry on load
         window.addEventListener('DOMContentLoaded', () => {
             fetchSystemTelemetry();
-            // Refresh telemetry every 15 seconds
             setInterval(fetchSystemTelemetry, 15000);
         });
 
@@ -388,9 +424,8 @@
             const customAlias = document.getElementById('customAlias').value.trim();
             const ttlDays = document.getElementById('ttlDays').value;
 
-            // Loading state
             btn.disabled = true;
-            btnText.textContent = "Processing...";
+            btnText.textContent = "🪓 Chopping off tracking garbage...";
             btnSpinner.classList.remove('hidden');
             alertBox.classList.add('hidden');
 
@@ -410,10 +445,9 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Link generation failed');
+                    throw new Error(data.message || 'Link butchering failed');
                 }
 
-                // Display success
                 latestShortCode = data.shortCode;
                 const linkElem = document.getElementById('shortUrlLink');
                 linkElem.href = data.shortUrl;
@@ -421,28 +455,25 @@
 
                 resultCard.classList.remove('hidden');
 
-                // Render QR Code
                 const qrContainer = document.getElementById('qrcode');
                 qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
                     text: data.shortUrl,
                     width: 180,
                     height: 180,
-                    colorDark: "#0f172a",
+                    colorDark: "#020617",
                     colorLight: "#ffffff"
                 });
                 document.getElementById('qrUrlText').textContent = data.shortUrl;
-
-                // Pre-populate analytics input
                 document.getElementById('analyticsCodeInput').value = data.shortCode;
 
-                showAlert('Link successfully shortened & pre-warmed in L1 Cache!', 'success');
+                showAlert('🔥 Link successfully de-bloated & pre-warmed in L1 Cache!', 'success');
                 fetchSystemTelemetry();
             } catch (err) {
                 showAlert(err.message, 'error');
             } finally {
                 btn.disabled = false;
-                btnText.textContent = "Shorten Link";
+                btnText.textContent = "🔥 Butcher The Bloat & Shorten";
                 btnSpinner.classList.add('hidden');
             }
         }
@@ -462,8 +493,8 @@
             const linkElem = document.getElementById('shortUrlLink');
             navigator.clipboard.writeText(linkElem.textContent.trim()).then(() => {
                 const btnText = document.getElementById('copyBtnText');
-                btnText.textContent = 'Copied!';
-                setTimeout(() => { btnText.textContent = 'Copy'; }, 2000);
+                btnText.textContent = '🚀 Copied! Stop clicking me bro.';
+                setTimeout(() => { btnText.textContent = 'Copy & Go Flex'; }, 2200);
             });
         }
 
@@ -483,7 +514,7 @@
         async function fetchAnalytics() {
             const code = document.getElementById('analyticsCodeInput').value.trim();
             if (!code) {
-                alert('Please enter a short code');
+                alert('Bro enter a short code first');
                 return;
             }
 
@@ -497,34 +528,31 @@
                 const data = await response.json();
                 renderAnalytics(data);
             } catch (err) {
-                alert('Analytics Error: ' + err.message);
+                alert('Stalker Error: ' + err.message);
             }
         }
 
         function renderAnalytics(data) {
-            // Update KPIs
             document.getElementById('kpiClicks').textContent = Number(data.totalClicks || 0).toLocaleString();
             
             const countries = Object.keys(data.countryBreakdown || {});
-            document.getElementById('kpiCountry').textContent = countries.length > 0 ? countries[0] : 'None';
+            document.getElementById('kpiCountry').textContent = countries.length > 0 ? countries[0] : 'None yet';
 
             const devices = Object.keys(data.deviceBreakdown || {});
-            document.getElementById('kpiDevice').textContent = devices.length > 0 ? devices[0] : 'None';
+            document.getElementById('kpiDevice').textContent = devices.length > 0 ? devices[0] : 'None yet';
 
-            document.getElementById('kpiStatus').textContent = data.expired ? 'Expired' : 'Active';
-            document.getElementById('kpiStatus').className = `text-2xl font-extrabold mt-1 ${data.expired ? 'text-red-400' : 'text-emerald-400'}`;
-            document.getElementById('kpiExpiry').textContent = data.expiresAt ? 'Expires: ' + new Date(data.expiresAt).toLocaleDateString() : 'Never expires';
+            document.getElementById('kpiStatus').textContent = data.expired ? 'Dead 💀' : 'Alive & Kicking 🔥';
+            document.getElementById('kpiStatus').className = `text-2xl font-black mt-1 ${data.expired ? 'text-red-400' : 'text-emerald-400'}`;
+            document.getElementById('kpiExpiry').textContent = data.expiresAt ? 'Expires: ' + new Date(data.expiresAt).toLocaleDateString() : 'Immortal (Never expires)';
 
-            // Render Charts
             renderCountryChart(data.countryBreakdown || {});
             renderDeviceChart(data.deviceBreakdown || {});
 
-            // Render Recent Events Table
             const tbody = document.getElementById('telemetryTableBody');
             tbody.innerHTML = '';
 
             if (!data.recentEvents || data.recentEvents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500 font-sans">No clicks recorded yet for code '${data.shortCode}'</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500 font-sans">No victims recorded yet for code '${data.shortCode}'. Send it to someone!</td></tr>`;
             } else {
                 data.recentEvents.forEach(event => {
                     const tr = document.createElement('tr');
@@ -532,10 +560,10 @@
                     const formattedTime = new Date(event.timestamp).toLocaleTimeString();
                     tr.innerHTML = `
                         <td class="py-2.5 px-3 text-slate-400">${formattedTime}</td>
-                        <td class="py-2.5 px-3 font-semibold text-indigo-400">${event.country || 'Unknown'}</td>
+                        <td class="py-2.5 px-3 font-semibold text-rose-400">${event.country || 'Unknown'}</td>
                         <td class="py-2.5 px-3 text-slate-300">${event.deviceType || 'Desktop'}</td>
                         <td class="py-2.5 px-3 text-slate-300">${event.browser || 'Chrome'}</td>
-                        <td class="py-2.5 px-3 text-slate-400 truncate max-w-[120px]">${event.referer || 'Direct'}</td>
+                        <td class="py-2.5 px-3 text-slate-400 truncate max-w-[120px]">${event.referer || 'Direct / Chat'}</td>
                         <td class="py-2.5 px-3 text-slate-500">${event.ipHash || 'anon'}</td>
                     `;
                     tbody.appendChild(tr);
@@ -563,9 +591,9 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Clicks',
+                        label: 'Victims',
                         data: values,
-                        backgroundColor: '#6366f1',
+                        backgroundColor: '#f43f5e',
                         borderRadius: 6
                     }]
                 },
@@ -602,7 +630,7 @@
                     labels: labels,
                     datasets: [{
                         data: values,
-                        backgroundColor: ['#6366f1', '#a855f7', '#ec4899', '#38bdf8'],
+                        backgroundColor: ['#f43f5e', '#a855f7', '#06b6d4', '#10b981'],
                         borderWidth: 0
                     }]
                 },
@@ -627,7 +655,7 @@
                 document.getElementById('telemetryQueueDepth').textContent = (data.analyticsQueueDepth || 0) + ' queued';
                 document.getElementById('telemetryMemory').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB`;
             } catch (e) {
-                console.error("Telemetry fetch failed", e);
+                console.error("Telemetry error", e);
             }
         }
     </script>
