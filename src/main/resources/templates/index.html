@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShortAF | Distributed High-Throughput URL Engine</title>
+    <title>ShortAF — Butcher The Bloat</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,13 +47,13 @@
     <div id="toast-container"></div>
 
     <!-- ====================================================================
-         FLOATING APPLE GLASS PILL NAVBAR
+         FLOATING APPLE GLASS PILL NAVBAR (Zero-Overlap Responsive Layout)
          ==================================================================== -->
     <header class="fixed top-4 left-0 right-0 z-40 px-3 sm:px-6 max-w-7xl mx-auto">
-        <nav class="apple-glass-nav rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-all duration-300">
+        <nav class="apple-glass-nav rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3 transition-all duration-300">
             <!-- Brand / Logo -->
             <a href="/" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 p-0.5 shadow-lg shadow-sky-500/25 shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 p-0.5 shadow-lg shadow-sky-500/25 shrink-0 group-hover:scale-105 transition-transform">
                     <div class="w-full h-full rounded-full bg-[#07090e] flex items-center justify-center text-xs font-black tracking-tighter text-sky-400 font-mono">
                         AF
                     </div>
@@ -67,24 +67,24 @@
                 </div>
             </a>
 
-            <!-- Technical Spec Badges -->
-            <div class="hidden xl:flex items-center gap-2 text-[11px] font-mono">
+            <!-- Technical Spec Badges (Shown only on extra wide screens) -->
+            <div class="hidden xl:flex items-center gap-2 text-[11px] font-mono shrink-0">
                 <span class="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-300 border border-sky-500/20">Java 21 Loom</span>
                 <span class="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">Guava Bloom Barrier</span>
                 <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">L1 Caffeine &lt;0.1ms</span>
             </div>
 
             <!-- Right Controls -->
-            <div class="flex items-center gap-2">
-                <button onclick="scrollToSection('architecture-section')" class="mac-dock-item hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="scrollToSection('architecture-section')" class="mac-dock-item hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
                     <i data-lucide="cpu" class="w-3.5 h-3.5 text-sky-400"></i>
                     <span>ARCHITECTURE</span>
                 </button>
-                <button onclick="scrollToSection('analytics-section')" class="mac-dock-item hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
+                <button onclick="scrollToSection('analytics-section')" class="mac-dock-item hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition border border-white/10 cursor-pointer">
                     <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
                     <span>TELEMETRY</span>
                 </button>
-                <a href="/admin" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 hover:scale-105 active:scale-95 transition-all shadow-sm font-mono">
+                <a href="/admin" class="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 hover:scale-105 active:scale-95 transition-all shadow-sm font-mono shrink-0">
                     <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i>
                     <span>DICTATOR CONSOLE</span>
                 </a>
@@ -92,11 +92,11 @@
         </nav>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 space-y-16">
+    <!-- Main Content Area with Generous Clearance for Floating Header -->
+    <main class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-36 sm:pt-40 pb-20 space-y-16">
 
         <!-- Hero Section -->
-        <section class="text-center max-w-3xl mx-auto space-y-6 pt-4">
+        <section class="text-center max-w-3xl mx-auto space-y-6 pt-2">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold bg-sky-500/10 text-sky-300 border border-sky-500/25 shadow-sm">
                 <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-400"></i>
                 <span>Distributed Sub-Millisecond URL Execution</span>
@@ -673,9 +673,7 @@
             document.getElementById('kpiCountry').textContent = countries.length > 0 ? countries[0] : 'None yet';
 
             const devices = Object.keys(data.deviceBreakdown || {});
-            document.getElementById('kpiDevice').textContent = devices.length > 0 ? devices[0] : 'None yet';
-
-            document.getElementById('kpiStatus').textContent = data.expired ? 'Dead 💀' : 'Alive & Kicking 🔥';
+            document.getElementById('kpiStatus').textContent = data.expired ? 'Dead' : 'Active & Alive';
             document.getElementById('kpiStatus').className = `text-2xl font-bold mt-1 font-mono ${data.expired ? 'text-slate-500' : 'text-emerald-400'}`;
             document.getElementById('kpiExpiry').textContent = data.expiresAt ? 'Expires: ' + new Date(data.expiresAt).toLocaleDateString() : 'Immortal (Never expires)';
 

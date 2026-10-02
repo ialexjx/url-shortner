@@ -167,6 +167,11 @@ body {
     outline: none;
 }
 
+select.apple-glass-input option {
+    background-color: #0d121c;
+    color: #f8fafc;
+}
+
 /* Shimmer Button (Electric Cyan to High-TPS Emerald) */
 .shimmer-btn {
     background: linear-gradient(135deg, #0284c7 0%, #06b6d4 50%, #10b981 100%);
