@@ -74,12 +74,19 @@ flowchart TD
 - Enabled via `spring.threads.virtual.enabled=true`.
 - Handles 10,000+ concurrent requests without exhausting OS carrier threads, keeping memory consumption under 200MB.
 
+### 6. Admin Governance & Lifecycle Management
+- Dedicated **Admin Console (`/admin`)** protected by secret key (`admin123`).
+- Search & filter through all shortened links with pagination.
+- Instant link deactivation / reactivation (phishing defense) and permanent record deletion.
+- Real-time global metric tracking (Total links, Global click aggregates, Active vs Inactive ratio).
+
 ---
 
-## 🖥️ Interactive Web Dashboard & Live Telemetry
+## 🖥️ Interactive Web Dashboard & Admin Console
 
-ScaleLink includes a responsive, dark-mode dashboard available at `/`:
+ScaleLink includes two polished, dark-mode portals:
 
+### 1. Public Shortener & Analytics (`/`)
 1. **Fast Shortener**: Long URL input, optional Custom Alias (`/my-resume`), and TTL expiration dropdown.
 2. **Instant QR Code**: On-the-fly QR code generation for mobile scanning.
 3. **Real-time Analytics Dashboard**:
@@ -92,6 +99,12 @@ ScaleLink includes a responsive, dark-mode dashboard available at `/`:
    - Guava Bloom Filter element count.
    - Async Ring Buffer queue depth.
    - JVM Heap Memory gauge (Container-aware).
+
+### 2. Admin Operations Console (`/admin`)
+- **URL Directory**: Paginated, searchable listing of every short link generated.
+- **Phishing & Abuse Mitigation**: One-click link toggle to deactivate/reactivate links instantly with cache eviction.
+- **Permanent Deletion**: Remove unwanted links from both PostgreSQL and Cache layers.
+- **Portfolio Demo Key**: Pre-configured with `admin123` for instant testing by recruiters and interviewers.
 
 ---
 

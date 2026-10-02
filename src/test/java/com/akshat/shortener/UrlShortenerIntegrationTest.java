@@ -99,4 +99,50 @@ class UrlShortenerIntegrationTest {
                 .andExpect(jsonPath("$.status", is("HEALTHY_OPTIMAL")))
                 .andExpect(jsonPath("$.virtualThreadsEnabled", is(true)));
     }
+
+    @Test
+    @DisplayName("Admin Overview requires valid admin key")
+    void testAdminOverviewSecurity() throws Exception {
+        // Without key or with invalid key -> 401 Unauthorized
+        mockMvc.perform(get("/api/v1/admin/overview"))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(get("/api/v1/admin/overview?key=wrongKey"))
+                .andExpect(status().isUnauthorized());
+
+        // With valid key -> 200 OK
+        mockMvc.perform(get("/api/v1/admin/overview?key=admin123"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalUrls", notNullValue()))
+                .andExpect(jsonPath("$.totalClicks", notNullValue()));
+    }
+
+    @Test
+    @DisplayName("Admin URL listing and toggle status flow")
+    void testAdminListAndToggleFlow() throws Exception {
+        // Create a URL
+        ShortenRequest request = ShortenRequest.builder()
+                .originalUrl("https://news.ycombinator.com/item?id=12345")
+                .customAlias("admin-test-" + System.currentTimeMillis())
+                .build();
+
+        mockMvc.perform(post("/api/v1/shorten")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        // Admin list URLs
+        mockMvc.perform(get("/api/v1/admin/urls?key=admin123&search=" + request.getCustomAlias()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(greaterThanOrEqualTo(1))));
+
+        // Admin toggle status (Deactivate)
+        mockMvc.perform(post("/api/v1/admin/urls/" + request.getCustomAlias() + "/toggle?key=admin123"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isActive", is(false)));
+
+        // Requesting deactivated URL should return 404
+        mockMvc.perform(get("/" + request.getCustomAlias()))
+                .andExpect(status().isNotFound());
+    }
 }

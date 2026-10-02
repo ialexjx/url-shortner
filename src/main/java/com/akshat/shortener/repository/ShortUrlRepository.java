@@ -33,4 +33,23 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
     @Modifying
     @Query("UPDATE ShortUrl s SET s.clickCount = s.clickCount + :delta WHERE s.shortCode = :shortCode")
     int incrementClickCount(@Param("shortCode") String shortCode, @Param("delta") long delta);
+
+    /**
+     * Admin Portal: Pagination and search support
+     */
+    org.springframework.data.domain.Page<ShortUrl> findAllByOrderByCreatedAtDesc(org.springframework.data.domain.Pageable pageable);
+
+    org.springframework.data.domain.Page<ShortUrl> findByShortCodeContainingIgnoreCaseOrOriginalUrlContainingIgnoreCaseOrderByCreatedAtDesc(
+            String shortCode, String originalUrl, org.springframework.data.domain.Pageable pageable);
+
+    long countByIsActiveTrue();
+
+    long countByIsActiveFalse();
+
+    @Query("SELECT COALESCE(SUM(s.clickCount), 0) FROM ShortUrl s")
+    long sumTotalClicks();
+
+    @Modifying
+    @Query("DELETE FROM ShortUrl s WHERE s.shortCode = :shortCode")
+    void deleteByShortCode(@Param("shortCode") String shortCode);
 }

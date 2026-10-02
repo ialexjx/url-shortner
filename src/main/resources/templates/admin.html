@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScaleLink | Admin Operations Console</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold tracking-tight text-white">ScaleLink</span>
+                        <span class="ml-1.5 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Admin Portal</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Admin Key & Navigation Links -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs">
+                    <span class="text-slate-400">Admin Key:</span>
+                    <input type="password" id="adminKeyInput" value="admin123" placeholder="admin123"
+                           class="bg-transparent border-0 text-amber-400 font-mono focus:outline-none w-24 text-xs">
+                    <button onclick="saveAdminKey()" class="text-slate-400 hover:text-white transition" title="Apply Key">✓</button>
+                </div>
+                <a href="/" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Public Shortener
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Banner with Demo Notice -->
+        <div class="bg-gradient-to-r from-amber-500/10 via-slate-900 to-indigo-500/10 border border-amber-500/20 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+                <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>🛡️ Global URL Management & Governance</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-400">
+                    Search, inspect, deactivate phishing links, or permanently prune database records.
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="text-xs px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono">
+                    Portfolio Demo Key: <strong>admin123</strong>
+                </span>
+                <button onclick="loadAdminData()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Overview Metrics Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                <span class="text-xs text-slate-400 font-medium">Total URLs</span>
+                <p id="statTotalUrls" class="text-2xl font-extrabold text-white mt-1">-</p>
+                <span class="text-[11px] text-slate-500 mt-1">Database Records</span>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                <span class="text-xs text-slate-400 font-medium">Global Clicks</span>
+                <p id="statTotalClicks" class="text-2xl font-extrabold text-indigo-400 mt-1">-</p>
+                <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1">● Aggregated</span>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                <span class="text-xs text-slate-400 font-medium">Active Links</span>
+                <p id="statActiveUrls" class="text-2xl font-extrabold text-emerald-400 mt-1">-</p>
+                <span id="statInactiveSub" class="text-[11px] text-slate-500 mt-1">- inactive</span>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                <span class="text-xs text-slate-400 font-medium">L1 Cache / Memory</span>
+                <p id="statL1Memory" class="text-2xl font-extrabold text-purple-400 mt-1">-</p>
+                <span id="statBloomSub" class="text-[11px] text-slate-500 mt-1">Bloom barrier active</span>
+            </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="relative flex-1 max-w-md">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search by shortCode or destination URL..."
+                           onkeyup="handleSearchKeyup(event)"
+                           class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm">
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="triggerSearch()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition">
+                        Search
+                    </button>
+                    <button onclick="clearSearch()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">
+                        Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-950 text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-800">
+                        <tr>
+                            <th class="py-3 px-3">Short Code</th>
+                            <th class="py-3 px-3">Original Destination</th>
+                            <th class="py-3 px-3">Clicks</th>
+                            <th class="py-3 px-3">Created</th>
+                            <th class="py-3 px-3">Status</th>
+                            <th class="py-3 px-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="urlTableBody" class="divide-y divide-slate-800/60 bg-slate-900/40">
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-slate-500">
+                                Loading URLs...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="flex items-center justify-between pt-2 text-xs text-slate-400">
+                <span id="pageInfo">Showing page 1</span>
+                <div class="flex items-center space-x-2">
+                    <button id="prevBtn" onclick="changePage(-1)" disabled
+                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition">
+                        Previous
+                    </button>
+                    <button id="nextBtn" onclick="changePage(1)" disabled
+                            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 transition">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+        ScaleLink Admin Console • Secure URL Governance & Lifecycle Engine
+    </footer>
+
+    <!-- Script -->
+    <script>
+        let currentPage = 0;
+        let totalPages = 1;
+        let currentSearch = '';
+
+        function getAdminKey() {
+            return localStorage.getItem('scalelink_admin_key') || document.getElementById('adminKeyInput').value.trim() || 'admin123';
+        }
+
+        function saveAdminKey() {
+            const key = document.getElementById('adminKeyInput').value.trim();
+            localStorage.setItem('scalelink_admin_key', key);
+            alert('Admin key updated! Reloading data...');
+            loadAdminData();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('scalelink_admin_key');
+            if (saved) {
+                document.getElementById('adminKeyInput').value = saved;
+            }
+            loadAdminData();
+        });
+
+        async function loadAdminData() {
+            await fetchOverview();
+            await fetchUrls(currentPage, currentSearch);
+        }
+
+        async function fetchOverview() {
+            const key = getAdminKey();
+            try {
+                const res = await fetch(`/api/v1/admin/overview?key=${encodeURIComponent(key)}`);
+                if (!res.ok) throw new Error('Unauthorized or failed to fetch overview');
+                const data = await res.json();
+
+                document.getElementById('statTotalUrls').textContent = Number(data.totalUrls || 0).toLocaleString();
+                document.getElementById('statTotalClicks').textContent = Number(data.totalClicks || 0).toLocaleString();
+                document.getElementById('statActiveUrls').textContent = Number(data.activeUrls || 0).toLocaleString();
+                document.getElementById('statInactiveSub').textContent = `${data.inactiveUrls || 0} deactivated`;
+                document.getElementById('statL1Memory').textContent = `${data.l1CacheEntries || 0} keys`;
+                document.getElementById('statBloomSub').textContent = `${data.jvmMemoryUsedMb} / ${data.jvmMemoryMaxMb} MB JVM`;
+            } catch (err) {
+                console.error("Overview error", err);
+            }
+        }
+
+        async function fetchUrls(page = 0, search = '') {
+            const key = getAdminKey();
+            const tbody = document.getElementById('urlTableBody');
+
+            try {
+                let url = `/api/v1/admin/urls?page=${page}&size=10&key=${encodeURIComponent(key)}`;
+                if (search) {
+                    url += `&search=${encodeURIComponent(search)}`;
+                }
+
+                const res = await fetch(url);
+                if (res.status === 401) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-400">Invalid Admin Key! Please enter valid key in the top bar (Demo: admin123).</td></tr>`;
+                    return;
+                }
+                if (!res.ok) throw new Error('Failed to fetch URLs');
+
+                const data = await res.json();
+                currentPage = data.number;
+                totalPages = data.totalPages;
+
+                renderTable(data.content);
+                updatePagination(data);
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-400">${err.message}</td></tr>`;
+            }
+        }
+
+        function renderTable(urls) {
+            const tbody = document.getElementById('urlTableBody');
+            tbody.innerHTML = '';
+
+            if (!urls || urls.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500">No URLs found matching your criteria.</td></tr>`;
+                return;
+            }
+
+            urls.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition border-b border-slate-800/40";
+
+                let statusBadge = '';
+                if (!u.active) {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px]">Deactivated</span>';
+                } else if (u.expired) {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 text-[10px]">Expired</span>';
+                } else {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Active</span>';
+                }
+
+                const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
+
+                tr.innerHTML = `
+                    <td class="py-3 px-3 font-mono font-bold text-white">
+                        <a href="/${u.shortCode}" target="_blank" class="hover:text-indigo-400 transition underline underline-offset-2">
+                            ${u.shortCode}
+                        </a>
+                        ${u.customAlias ? '<span class="ml-1 text-[9px] text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded">custom</span>' : ''}
+                    </td>
+                    <td class="py-3 px-3 max-w-xs truncate text-slate-300" title="${u.originalUrl}">
+                        <a href="${u.originalUrl}" target="_blank" class="hover:text-white transition">
+                            ${u.originalUrl}
+                        </a>
+                    </td>
+                    <td class="py-3 px-3 font-semibold text-slate-200">
+                        ${Number(u.clickCount || 0).toLocaleString()}
+                    </td>
+                    <td class="py-3 px-3 text-slate-400 text-[11px]">
+                        ${dateStr}
+                    </td>
+                    <td class="py-3 px-3">
+                        ${statusBadge}
+                    </td>
+                    <td class="py-3 px-3 text-right space-x-1 shrink-0">
+                        <button onclick="toggleStatus('${u.shortCode}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-medium transition">
+                            ${u.active ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button onclick="deleteLink('${u.shortCode}')" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded text-[11px] font-medium transition">
+                            Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updatePagination(data) {
+            document.getElementById('pageInfo').textContent = `Page ${data.number + 1} of ${Math.max(1, data.totalPages)} (${data.totalElements} links)`;
+            document.getElementById('prevBtn').disabled = data.first;
+            document.getElementById('nextBtn').disabled = data.last;
+        }
+
+        function changePage(delta) {
+            const next = currentPage + delta;
+            if (next >= 0 && next < totalPages) {
+                fetchUrls(next, currentSearch);
+            }
+        }
+
+        function triggerSearch() {
+            currentSearch = document.getElementById('searchInput').value.trim();
+            currentPage = 0;
+            fetchUrls(0, currentSearch);
+        }
+
+        function handleSearchKeyup(e) {
+            if (e.key === 'Enter') {
+                triggerSearch();
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            currentSearch = '';
+            currentPage = 0;
+            fetchUrls(0, '');
+        }
+
+        async function toggleStatus(shortCode) {
+            const key = getAdminKey();
+            try {
+                const res = await fetch(`/api/v1/admin/urls/${shortCode}/toggle?key=${encodeURIComponent(key)}`, {
+                    method: 'POST'
+                });
+                if (!res.ok) throw new Error('Toggle failed');
+                loadAdminData();
+            } catch (err) {
+                alert('Action failed: ' + err.message);
+            }
+        }
+
+        async function deleteLink(shortCode) {
+            if (!confirm(`Kya aap short link '${shortCode}' ko permanently delete karna chahte hain?`)) {
+                return;
+            }
+            const key = getAdminKey();
+            try {
+                const res = await fetch(`/api/v1/admin/urls/${shortCode}?key=${encodeURIComponent(key)}`, {
+                    method: 'DELETE'
+                });
+                if (!res.ok) throw new Error('Delete failed');
+                loadAdminData();
+            } catch (err) {
+                alert('Delete failed: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
